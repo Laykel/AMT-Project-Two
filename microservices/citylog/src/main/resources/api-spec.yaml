@@ -1,0 +1,208 @@
+swagger: '2.0'
+info:
+  version: '0.1.0'
+  title: Citylog API
+  description: API to record and retrieve the cities you visited.
+  termsOfService: none
+  contact:
+    name: Citylog team
+    email: luc.wachter@heig-vd.ch
+  license:
+    name: MIT
+    url: http://opensource.org/licenses/MIT
+basePath: /api
+schemes:
+  - http
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+
+tags:
+- name: visits
+  description: Retrieve your visits and create, update or delete a new visit
+- name: cities
+  description: Retrieve the list of cities
+- name: countries
+  description: Retrieve the list of countries
+
+paths:
+  # TODO security
+  /visits:
+    post:
+      description: Create a new visit
+      operationId: createVisit
+      tags:
+        - visits
+      consumes:
+        - application/json
+      #security:
+      #  - Bearer: []
+      parameters:
+        - name: visit
+          in: body
+          description: The user's visit to a city
+          required: true
+          schema:
+            $ref: '#/definitions/visit'
+      responses:
+        '201':
+          description: Creation successful
+          headers:
+            Location:
+              description: URL of the created resource
+              type: string
+        '400':
+          description: The provided city doesn't exist
+        '401':
+          description: Creation unauthorized
+    # TODO add pagination
+    get:
+      description: List all of this user's visits
+      operationId: listVisits
+      tags:
+        - visits
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of the user's visits
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/visit'
+        '401':
+          description: Not authorized
+
+  /visit/{id}:
+    get:
+      description: Show the details of the specified visit
+      operationId: readVisitDetails
+      tags:
+        - visits
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: Numeric ID of the visit to retrieve
+      responses:
+        '200':
+          description: Details of the user's visit
+          schema:
+            $ref: '#/definitions/visit'
+        '401':
+          description: Not authorized
+        '404':
+          description: Resource doesn't exist
+    patch:
+      description: Update some fields of the specified visit
+      operationId: updateVisit
+      tags:
+        - visits
+      consumes:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: Numeric ID of the visit to retrieve
+      responses:
+        '200':
+          description: Update successful
+        '400':
+          description: The provided city doesn't exist
+        '401':
+          description: Update unauthorized
+        '404':
+          description: Resource doesn't exist
+    delete:
+      description: Delete the specified visit
+      operationId: deleteVisit
+      tags:
+        - visits
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: Numeric ID of the visit to retrieve
+      responses:
+        '204':
+          description: Removal successful
+        '401':
+          description: Removal unauthorized
+        '404':
+          description: Resource doesn't exist
+
+  /cities:
+    get:
+      description: List all of the cities by order of popularity
+      operationId: listCities
+      tags:
+        - cities
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of all cities
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/city'
+
+  /countries:
+    get:
+      description: List all of the countries
+      operationId: listCountries
+      tags:
+        - countries
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of all countries
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/country'
+
+definitions:
+  visit:
+    type: object
+    required:
+      - cityId
+      - startDate
+      - endDate
+    properties:
+      cityId:
+        type: integer
+        format: int64
+      startDate:
+        type: string
+        format: date
+      endDate:
+        type: string
+        format: date
+  city:
+      type: object
+      required:
+        - name
+        - countryCode
+      properties:
+        name:
+          type: string
+        countryCode:
+          type: string
+  country:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
