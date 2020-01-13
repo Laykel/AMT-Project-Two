@@ -14,16 +14,14 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
 public class SwaggerDocumentationConfig {
-
     ApiInfo apiInfo() {
         return new ApiInfoBuilder()
             .title("Citylog API")
-            .description("An API to demonstrate Swagger and Spring Boot")
-            .license("")
-            .licenseUrl("http://unlicense.org")
-            .termsOfServiceUrl("")
+            .description("API to record and retrieve the cities you visited.")
+            .license("MIT")
+            .licenseUrl("http://opensource.org/licenses/MIT")
             .version("0.1.0")
-            .contact(new Contact("","", ""))
+            .contact(new Contact("Citylog team","", "luc.wachter@heig-vd.ch"))
             .build();
     }
 
@@ -37,5 +35,4 @@ public class SwaggerDocumentationConfig {
                 .directModelSubstitute(org.joda.time.DateTime.class, java.util.Date.class)
                 .apiInfo(apiInfo());
     }
-
 }
