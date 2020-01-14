@@ -1,0 +1,58 @@
+version: '3.7'
+
+services:
+  # Traefik reverse proxying
+  reverse-proxy:
+    image: traefik:v2.0.6
+    container_name: citylog-rp
+    restart: on-failure
+    ports:
+      - 80:80
+      - 8080:8080
+    volumes:
+      # Dynamic configuration
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Static configuration
+      - ./traefik.toml:/etc/traefik/traefik.toml
+
+  # MySQL DB
+  db:
+    build: images/mysql/
+    container_name: citylog-db
+    restart: on-failure
+    command: --default-authentication-plugin=mysql_native_password --max-allowed-packet=300M
+    environment:
+      MYSQL_DATABASE: citylog
+      MYSQL_ROOT_PASSWORD: pwd
+    ports:
+      - 3306:3306
+    labels:
+      - "traefik.enable=false"
+
+  # Main API for citylog app
+  citylog:
+    build: images/citylog/
+    container_name: citylog
+    restart: on-failure
+    environment:
+        spring_profiles_active: docker
+    depends_on:
+      - db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.main.entrypoints=web"
+      - "traefik.http.routers.auth.rule=Host(`localhost`) && PathPrefix(`/api/citylog`)"
+
+  # Auth API for citylog app
+  citylog-auth:
+    build: images/citylog-auth/
+    container_name: citylog-auth
+    restart: on-failure
+    environment:
+        spring_profiles_active: docker
+    depends_on:
+      - db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.auth.entrypoints=web"
+      - "traefik.http.routers.auth.rule=Host(`localhost`) && PathPrefix(`/api/auth`)"
