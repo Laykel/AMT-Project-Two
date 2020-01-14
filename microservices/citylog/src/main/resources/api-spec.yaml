@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-    version: '0.1.0'
+    version: '0.1.1'
     title: Citylog API
     description: API to record and retrieve the cities you visited.
     contact:
@@ -14,11 +14,11 @@ basePath: /api
 schemes:
     - http
 
-securityDefinitions:
-    Bearer:
-        type: apiKey
-        name: Authorization
-        in: header
+#securityDefinitions:
+    #Bearer:
+        #type: apiKey
+        #name: Authorization
+        #in: header
 
 tags:
     - name: visits

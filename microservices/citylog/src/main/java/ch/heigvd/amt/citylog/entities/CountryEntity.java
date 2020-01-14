@@ -18,9 +18,12 @@ public class CountryEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String name;
-    @Getter @Setter
+
+    @Getter
+    @Setter
     private String countryCode;
 
     public long getId() {
