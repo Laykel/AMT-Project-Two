@@ -4,7 +4,7 @@ services:
   # Traefik reverse proxying
   reverse-proxy:
     image: traefik:v2.0.6
-    container_name: citylog-rp
+    container_name: stalkerlog-rp
     restart: on-failure
     ports:
       - 80:80
@@ -18,21 +18,21 @@ services:
   # MySQL DB
   db:
     image: mysql:5.7.28
-    container_name: citylog-db
+    container_name: stalkerlog-db
     restart: on-failure
     command: --default-authentication-plugin=mysql_native_password --max-allowed-packet=300M
     environment:
-      MYSQL_DATABASE: citylog
+      MYSQL_DATABASE: stalkerlog
       MYSQL_ROOT_PASSWORD: pwd
     ports:
       - 3306:3306
     labels:
       - "traefik.enable=false"
 
-  # Main API for citylog app
-  citylog:
-    build: images/citylog/
-    container_name: citylog
+  # Main API for stalkerlog app
+  stalkerlog:
+    build: images/stalkerlog/
+    container_name: stalkerlog
     restart: on-failure
     environment:
         spring_profiles_active: docker
@@ -41,12 +41,12 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.main.entrypoints=web"
-      - "traefik.http.routers.auth.rule=Host(`localhost`) && PathPrefix(`/api/citylog`)"
+      - "traefik.http.routers.auth.rule=Host(`localhost`) && PathPrefix(`/api/stalkerlog`)"
 
-  # Auth API for citylog app
-  citylog-auth:
-    build: images/citylog-auth/
-    container_name: citylog-auth
+  # Auth API for stalkerlog app
+  stalkerlog-auth:
+    build: images/stalkerlog-auth/
+    container_name: stalkerlog-auth
     restart: on-failure
     environment:
         spring_profiles_active: docker

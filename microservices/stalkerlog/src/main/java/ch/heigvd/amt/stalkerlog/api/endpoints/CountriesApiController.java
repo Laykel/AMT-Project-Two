@@ -1,9 +1,9 @@
-package ch.heigvd.amt.citylog.api.endpoints;
+package ch.heigvd.amt.stalkerlog.api.endpoints;
 
-import ch.heigvd.amt.citylog.api.CountriesApi;
-import ch.heigvd.amt.citylog.entities.CountryEntity;
-import ch.heigvd.amt.citylog.api.model.Country;
-import ch.heigvd.amt.citylog.repositories.CountryRepository;
+import ch.heigvd.amt.stalkerlog.api.CountriesApi;
+import ch.heigvd.amt.stalkerlog.entities.CountryEntity;
+import ch.heigvd.amt.stalkerlog.api.model.Country;
+import ch.heigvd.amt.stalkerlog.repositories.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ public class CountriesApiController implements CountriesApi {
     @Autowired
     CountryRepository countryRepository;
 
-    public ResponseEntity<List<Country>> listCountries() {
+    public ResponseEntity<List<Country>> getCountries() {
         List<Country> countries = new ArrayList<>();
         for (CountryEntity countryEntity : countryRepository.findAll()) {
             countries.add(toCountry(countryEntity));

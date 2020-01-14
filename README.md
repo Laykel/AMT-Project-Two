@@ -1,8 +1,8 @@
-# AMT - Project Two : Citylog 2.0
+# AMT - Project Two : Stalkerlog
 
 ## Description
 
-A simple Spring application that exposes a REST API allowing users to record the cities they have visited, get a list of those cities and see the most visited cities of the world.
+A simple Spring application that exposes a REST API allowing users to record the cities they know their favourite stars have visited, get a list of the recorded stars and cities and manipulate their recorded visits.
 
 ## Navigate the documentation
 

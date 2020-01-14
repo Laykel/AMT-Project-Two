@@ -1,4 +1,4 @@
-package ch.heigvd.amt.citylog.entities;
+package ch.heigvd.amt.stalkerlog.entities;
 
 import lombok.Getter;
 import lombok.Setter;

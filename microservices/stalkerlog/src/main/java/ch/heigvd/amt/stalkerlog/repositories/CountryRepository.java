@@ -1,6 +1,6 @@
-package ch.heigvd.amt.citylog.repositories;
+package ch.heigvd.amt.stalkerlog.repositories;
 
-import ch.heigvd.amt.citylog.entities.CountryEntity;
+import ch.heigvd.amt.stalkerlog.entities.CountryEntity;
 import org.springframework.data.repository.CrudRepository;
 
 /**

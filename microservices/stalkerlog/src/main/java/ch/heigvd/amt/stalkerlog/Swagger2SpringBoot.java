@@ -1,4 +1,4 @@
-package ch.heigvd.amt.citylog;
+package ch.heigvd.amt.stalkerlog;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
@@ -10,7 +10,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-@ComponentScan(basePackages = { "ch.heigvd.amt.citylog", "ch.heigvd.amt.citylog.api" })
+@ComponentScan(basePackages = {"ch.heigvd.amt.stalkerlog", "ch.heigvd.amt.stalkerlog.api"})
 public class Swagger2SpringBoot implements CommandLineRunner {
     @Override
     public void run(String... arg0) throws Exception {

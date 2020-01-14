@@ -1,4 +1,4 @@
-package ch.heigvd.amt.citylog.api.util;
+package ch.heigvd.amt.stalkerlog.api.util;
 
 import javax.xml.bind.annotation.XmlTransient;
 
