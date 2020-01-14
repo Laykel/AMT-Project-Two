@@ -7,13 +7,13 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * JPA entity describing a country
+ * JPA entity describing a star
  *
  * @author Alison Savary, Luc Wachter
  */
 @Entity
-@Table(name = "country")
-public class CountryEntity implements Serializable {
+@Table(name = "star")
+public class StarEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
@@ -25,5 +25,5 @@ public class CountryEntity implements Serializable {
 
     @Getter
     @Setter
-    private String countryCode;
+    private String platform;
 }

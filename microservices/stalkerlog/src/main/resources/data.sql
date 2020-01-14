@@ -1,4 +1,4 @@
-INSERT INTO country_entity (country_code, name) VALUES
+INSERT INTO country (country_code, name) VALUES
 ('AF', 'Afghanistan'),
 ('AX', 'Åland Islands'),
 ('AL', 'Albania'),
