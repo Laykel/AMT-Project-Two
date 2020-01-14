@@ -17,7 +17,7 @@ services:
 
   # MySQL DB
   db:
-    build: images/mysql/
+    image: mysql:5.7.28
     container_name: citylog-db
     restart: on-failure
     command: --default-authentication-plugin=mysql_native_password --max-allowed-packet=300M
