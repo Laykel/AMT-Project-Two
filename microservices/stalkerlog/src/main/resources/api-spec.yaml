@@ -253,6 +253,12 @@ paths:
           type: integer
           required: true
           description: Numeric ID of the star to update
+        - name: star
+          in: body
+          description: The star's name and platform
+          required: true
+          schema:
+            $ref: '#/definitions/star'
       responses:
         '200':
           description: Update successful
