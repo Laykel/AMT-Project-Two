@@ -29,13 +29,6 @@ public class CountriesApiController implements CountriesApi {
         return ResponseEntity.ok(countries);
     }
 
-    private CountryEntity toCountryEntity(Country country) {
-        CountryEntity entity = new CountryEntity();
-        entity.setName(country.getName());
-        entity.setCountryCode(country.getCountryCode());
-        return entity;
-    }
-
     private Country toCountry(CountryEntity entity) {
         Country country = new Country();
         country.setName(entity.getName());

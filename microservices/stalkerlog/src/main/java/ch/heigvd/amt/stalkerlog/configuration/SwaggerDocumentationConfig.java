@@ -10,18 +10,16 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-07-26T19:36:34.802Z")
-
 @Configuration
 public class SwaggerDocumentationConfig {
     ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-            .title("Citylog API")
-            .description("API to record and retrieve the cities you visited.")
+            .title("Stalkerlog API")
+            .description("API to record and retrieve the cities your favourite stars visited.")
             .license("MIT")
             .licenseUrl("http://opensource.org/licenses/MIT")
-            .version("0.1.0")
-            .contact(new Contact("Citylog team","", "luc.wachter@heig-vd.ch"))
+            .version("0.2.0")
+            .contact(new Contact("Stalkerlog team","", "luc.wachter@heig-vd.ch"))
             .build();
     }
 
