@@ -57,9 +57,18 @@ public class StarsApiController implements StarsApi {
         }
     }
 
-    public ResponseEntity<Void> putStar(Integer id) {
-        // TODO
-        return null;
+    @Override
+    public ResponseEntity<Void> putStar(Integer id, @Valid Star star) {
+        StarEntity starEntity = toStarEntity(star);
+        // Star exists in database
+        if(starRepository.findById(Long.valueOf(id)).isPresent()) {
+            // TODO check owner
+            starEntity.setId(id);
+            starRepository.save(starEntity);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Override
