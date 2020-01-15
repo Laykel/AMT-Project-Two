@@ -1,6 +1,6 @@
 package ch.heigvd.amt.stalkerlog.repositories;
 
-import ch.heigvd.amt.stalkerlog.entities.CityEntity;
+import ch.heigvd.amt.stalkerlog.entities.UserEntity;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -8,5 +8,5 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author Alison Savary, Luc Wachter
  */
-public interface CityRepository extends CrudRepository<CityEntity, Long> {
+public interface UserRepository extends CrudRepository<UserEntity, Long> {
 }

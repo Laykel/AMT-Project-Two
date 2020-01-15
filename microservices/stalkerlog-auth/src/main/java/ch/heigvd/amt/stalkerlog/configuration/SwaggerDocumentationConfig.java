@@ -16,12 +16,12 @@ import springfox.documentation.spring.web.plugins.Docket;
 public class SwaggerDocumentationConfig {
     ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-            .title("Citylog API")
-            .description("API to record and retrieve the cities you visited.")
+            .title("Stalkerlog Auth API")
+            .description("API register users and get a JWT token.")
             .license("MIT")
             .licenseUrl("http://opensource.org/licenses/MIT")
             .version("0.1.0")
-            .contact(new Contact("Citylog team","", "luc.wachter@heig-vd.ch"))
+            .contact(new Contact("Stalkerlog team", "", "luc.wachter@heig-vd.ch"))
             .build();
     }
 
