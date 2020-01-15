@@ -1,0 +1,338 @@
+swagger: '2.0'
+info:
+  version: '0.2.0'
+  title: Stalkerlog API
+  description: API to record and retrieve the cities your favourite stars visited.
+  contact:
+    name: Stalkerlog team
+    email: luc.wachter@heig-vd.ch
+  license:
+    name: MIT
+    url: http://opensource.org/licenses/MIT
+host: localhost
+basePath: /api
+schemes:
+  - http
+
+#securityDefinitions:
+#  Bearer:
+#    type: apiKey
+#    name: Authorization
+#    in: header
+
+tags:
+- name: visits
+  description: Retrieve your star's visits and create, update or delete a new visit
+- name: stars
+  description: Retrieve the list of stars and create, update or delete a new star
+- name: cities
+  description: Retrieve the list of cities or countries
+
+paths:
+  # TODO security
+  /visits:
+    post:
+      description: Create a new visit
+      operationId: postVisit
+      tags:
+        - visits
+      consumes:
+        - application/json
+      #security:
+      #  - Bearer: []
+      parameters:
+        - name: visit
+          in: body
+          description: The star's visit to a city
+          required: true
+          schema:
+            $ref: '#/definitions/visit'
+      responses:
+        '201':
+          description: Creation successful
+          headers:
+            Location:
+              description: URL of the created resource
+              type: string
+        '400':
+          description: The provided city doesn't exist
+        '401':
+          description: Creation unauthorized
+    # TODO add pagination
+    get:
+      description: List all of this star's visits
+      operationId: getVisits
+      tags:
+        - visits
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of the user's visits
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/visit'
+        '401':
+          description: Not authorized
+
+  /visits/{id}:
+    get:
+      description: Show the details of the specified visit
+      operationId: getVisit
+      tags:
+        - visits
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: Numeric ID of the visit to retrieve
+      responses:
+        '200':
+          description: Details of the star's visit
+          schema:
+            $ref: '#/definitions/visit'
+        '401':
+          description: Not authorized
+        '404':
+          description: Resource doesn't exist
+    patch:
+      description: Update some fields of the specified visit
+      operationId: patchVisit
+      tags:
+        - visits
+      consumes:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: Numeric ID of the visit to retrieve
+      responses:
+        '200':
+          description: Update successful
+        '400':
+          description: The provided city doesn't exist
+        '401':
+          description: Update unauthorized
+        '404':
+          description: Resource doesn't exist
+    delete:
+      description: Delete the specified visit
+      operationId: deleteVisit
+      tags:
+        - visits
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: Numeric ID of the visit to remove
+      responses:
+        '204':
+          description: Removal successful
+        '401':
+          description: Removal unauthorized
+        '404':
+          description: Resource doesn't exist
+
+  # TODO add pagination
+  /cities:
+    get:
+      description: List all of the cities
+      operationId: getCities
+      tags:
+        - cities
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of all cities
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/city'
+
+  /countries:
+    get:
+      description: List all of the countries
+      operationId: getCountries
+      tags:
+        - cities
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of all countries
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/country'
+
+  # TODO add pagination
+  /stars:
+    post:
+      description: Create a new star
+      operationId: postStar
+      tags:
+        - stars
+      consumes:
+        - application/json
+      #security:
+      #  - Bearer: []
+      parameters:
+        - name: star
+          in: body
+          description: The star's name and platform
+          required: true
+          schema:
+            $ref: '#/definitions/star'
+      responses:
+        '201':
+          description: Creation successful
+          headers:
+            Location:
+              description: URL of the created resource
+              type: string
+        '400':
+          description: Bad request
+        '401':
+          description: Creation unauthorized
+    get:
+      description: List all of the stars
+      operationId: getStars
+      tags:
+        - stars
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of all the stars
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/star'
+
+  /stars/{id}:
+    get:
+      description: Show the details of the specified star
+      operationId: getStar
+      tags:
+        - stars
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: Numeric ID of the star to retrieve
+      responses:
+        '200':
+          description: Details of the star's visit
+          schema:
+            $ref: '#/definitions/star'
+        '401':
+          description: Not authorized
+        '404':
+          description: Resource doesn't exist
+    put:
+      description: Update the specified star
+      operationId: putStar
+      tags:
+        - stars
+      consumes:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: Numeric ID of the star to update
+      responses:
+        '200':
+          description: Update successful
+        '400':
+          description: Bad request
+        '401':
+          description: Update unauthorized
+        '404':
+          description: Resource doesn't exist
+    delete:
+      description: Delete the specified star
+      operationId: deleteStar
+      tags:
+        - stars
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: Numeric ID of the star to remove
+      responses:
+        '204':
+          description: Removal successful
+        '401':
+          description: Removal unauthorized
+        '404':
+          description: Resource doesn't exist
+
+
+definitions:
+  visit:
+    type: object
+    required:
+      - starId
+      - cityId
+      - owner
+    properties:
+      starId:
+        type: integer
+        format: int64
+      cityId:
+        type: integer
+        format: int64
+      startDate:
+        type: string
+        format: date
+      endDate:
+        type: string
+        format: date
+      owner:
+        type: integer
+        format: int64
+  star:
+    type: object
+    required:
+      - name
+      - platform
+    properties:
+      name:
+        type: string
+      platform:
+        type: string
+  city:
+      type: object
+      required:
+        - name
+        - countryId
+      properties:
+        name:
+          type: string
+        countryId:
+          type: integer
+          format: int64
+  country:
+    type: object
+    required:
+      - name
+      - countryCode
+    properties:
+      name:
+        type: string
+      countryCode:
+        type: string
