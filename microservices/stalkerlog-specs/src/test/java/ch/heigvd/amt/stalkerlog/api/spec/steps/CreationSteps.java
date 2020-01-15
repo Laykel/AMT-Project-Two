@@ -1,14 +1,14 @@
 package ch.heigvd.amt.stalkerlog.api.spec.steps;
 
-import cucumber.api.PendingException;
+import ch.heigvd.amt.stalkerlog.ApiException;
+import ch.heigvd.amt.stalkerlog.ApiResponse;
+import ch.heigvd.amt.stalkerlog.api.CitiesApi;
+import ch.heigvd.amt.stalkerlog.api.StarsApi;
+import ch.heigvd.amt.stalkerlog.api.dto.Star;
+import ch.heigvd.amt.stalkerlog.api.spec.helpers.Environment;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import io.avalia.fruits.ApiException;
-import io.avalia.fruits.ApiResponse;
-import io.avalia.fruits.api.DefaultApi;
-import io.avalia.fruits.api.dto.Fruit;
-import io.avalia.fruits.api.spec.helpers.Environment;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
@@ -19,9 +19,9 @@ import static org.junit.Assert.assertEquals;
 public class CreationSteps {
 
     private Environment environment;
-    private DefaultApi api;
+    private StarsApi starsApi;
 
-    Fruit fruit;
+    Star star;
 
     private ApiResponse lastApiResponse;
     private ApiException lastApiException;
@@ -30,23 +30,23 @@ public class CreationSteps {
 
     public CreationSteps(Environment environment) {
         this.environment = environment;
-        this.api = environment.getApi();
+        this.starsApi = environment.getStarsApi();
     }
 
-    @Given("^there is a Fruits server$")
-    public void there_is_a_Fruits_server() throws Throwable {
-        assertNotNull(api);
+    @Given("^there is a Stars server$")
+    public void there_is_a_Stars_server() throws Throwable {
+        assertNotNull(starsApi);
     }
 
-    @Given("^I have a fruit payload$")
-    public void i_have_a_fruit_payload() throws Throwable {
-        fruit = new io.avalia.fruits.api.dto.Fruit();
+    @Given("^I have a star payload$")
+    public void i_have_a_star_payload() throws Throwable {
+        star = new ch.heigvd.amt.stalkerlog.api.dto.Star();
     }
 
-    @When("^I POST it to the /fruits endpoint$")
-    public void i_POST_it_to_the_fruits_endpoint() throws Throwable {
+    @When("^I POST it to the /stars endpoint$")
+    public void i_POST_it_to_the_stars_endpoint() throws Throwable {
         try {
-            lastApiResponse = api.createFruitWithHttpInfo(fruit);
+            lastApiResponse = starsApi.postStarWithHttpInfo(star);
             lastApiCallThrewException = false;
             lastApiException = null;
             lastStatusCode = lastApiResponse.getStatusCode();

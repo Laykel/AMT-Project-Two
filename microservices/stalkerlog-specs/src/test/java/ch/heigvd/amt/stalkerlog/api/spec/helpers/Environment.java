@@ -1,6 +1,8 @@
 package ch.heigvd.amt.stalkerlog.api.spec.helpers;
 
-import ch.heigvd.amt.stalkerlog.api.DefaultApi;
+import ch.heigvd.amt.stalkerlog.api.CitiesApi;
+import ch.heigvd.amt.stalkerlog.api.StarsApi;
+import ch.heigvd.amt.stalkerlog.api.VisitsApi;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -10,19 +12,30 @@ import java.util.Properties;
  */
 public class Environment {
 
-    private DefaultApi api = new DefaultApi();
+    private CitiesApi citiesApi = new CitiesApi();
+    private StarsApi starsApi = new StarsApi();
+    private VisitsApi visitsApi = new VisitsApi();
 
     public Environment() throws IOException {
         Properties properties = new Properties();
         properties.load(this.getClass().getClassLoader().getResourceAsStream("environment.properties"));
         String url = properties.getProperty("ch.heigvd.amt.stalkerlog.server.url");
-        api.getApiClient().setBasePath(url);
+        citiesApi.getApiClient().setBasePath(url);
+        starsApi.getApiClient().setBasePath(url);
+        visitsApi.getApiClient().setBasePath(url);
 
     }
 
-    public DefaultApi getApi() {
-        return api;
+    public CitiesApi getCitiesApi() {
+        return citiesApi;
     }
 
+    public StarsApi getStarsApi() {
+        return starsApi;
+    }
+
+    public VisitsApi getVisitsApi() {
+        return visitsApi;
+    }
 
 }
