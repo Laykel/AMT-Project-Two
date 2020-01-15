@@ -41,7 +41,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.main.entrypoints=web"
-      - "traefik.http.routers.auth.rule=Host(`localhost`) && PathPrefix(`/api/stalkerlog`)"
+      - "traefik.http.routers.auth.rule=Host(`localhost`) && PathPrefix(`/api`)"
 
   # Auth API for stalkerlog app
   stalkerlog-auth:
@@ -55,4 +55,4 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.auth.entrypoints=web"
-      - "traefik.http.routers.auth.rule=Host(`localhost`) && PathPrefix(`/api/auth`)"
+      - "traefik.http.routers.auth.rule=Host(`localhost`) && PathPrefix(`/auth`)"

@@ -1,0 +1,80 @@
+swagger: '2.0'
+info:
+  version: '0.1.0'
+  title: Stalkerlog Auth API
+  description: API register users and get a JWT token.
+  contact:
+    name: Stalkerlog team
+    email: luc.wachter@heig-vd.ch
+  license:
+    name: MIT
+    url: http://opensource.org/licenses/MIT
+host: localhost
+basePath: /auth
+schemes:
+  - http
+
+#securityDefinitions:
+#  Bearer:
+#    type: apiKey
+#    name: Authorization
+#    in: header
+
+tags:
+- name: users
+  description: Create a new user (register), retrieve your information or update it
+- name: session
+  description: Retrieve a JWT token...
+
+paths:
+  /users:
+    post:
+      description: Create a new user
+      operationId: postUser
+      tags:
+        - users
+      consumes:
+        - application/json
+      #security:
+      #  - Bearer: []
+      parameters:
+        - name: user
+          in: body
+          description: The new user
+          required: true
+          schema:
+            $ref: '#/definitions/user'
+      responses:
+        '201':
+          description: Creation successful
+          headers:
+            Location:
+              description: URL of the created resource
+              type: string
+        '400':
+          description: Bad request
+
+  #/users/{id}:
+  #  get:
+
+  #/session:
+
+definitions:
+  user:
+    type: object
+    required:
+      - email
+      - firstName
+      - lastName
+      - password
+    properties:
+      email:
+        type: string
+        format: email
+      firstName:
+        type: string
+      lastName:
+        type: string
+      password:
+        type: string
+        format: password
