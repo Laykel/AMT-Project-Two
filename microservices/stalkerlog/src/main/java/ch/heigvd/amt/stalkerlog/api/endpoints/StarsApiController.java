@@ -73,8 +73,13 @@ public class StarsApiController implements StarsApi {
 
     @Override
     public ResponseEntity<Void> deleteStar(Integer id) {
-        // TODO
-        return null;
+        if(starRepository.findById(Long.valueOf(id)).isPresent()) {
+            // TODO check owner
+            starRepository.deleteById(Long.valueOf(id));
+            return ResponseEntity.status(204).build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     private StarEntity toStarEntity(Star star) {
