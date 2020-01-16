@@ -57,7 +57,6 @@ public class StarsApiController implements StarsApi {
         }
     }
 
-    @Override
     public ResponseEntity<Void> putStar(Integer id, @Valid Star star) {
         StarEntity starEntity = toStarEntity(star);
         // Star exists in database

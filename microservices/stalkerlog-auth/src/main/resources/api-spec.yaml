@@ -14,11 +14,11 @@ basePath: /auth
 schemes:
   - http
 
-#securityDefinitions:
-#  Bearer:
-#    type: apiKey
-#    name: Authorization
-#    in: header
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
 
 tags:
 - name: users
@@ -35,8 +35,9 @@ paths:
         - users
       consumes:
         - application/json
+      # TODO only admins can create users
       #security:
-      #  - Bearer: []
+        #- Bearer: []
       parameters:
         - name: user
           in: body
@@ -53,11 +54,101 @@ paths:
               type: string
         '400':
           description: Bad request
+    put:
+      description: Update the specified user
+      operationId: putUser
+      tags:
+        - users
+      consumes:
+        - application/json
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: Numeric ID of the user to update
+      responses:
+        '200':
+          description: Update successful
+        '400':
+          description: Bad request
+        '401':
+          description: Update unauthorized
+        '404':
+          description: Resource doesn't exist
+    delete:
+      description: Delete the specified user
+      operationId: deleteUser
+      tags:
+        - users
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: Numeric ID of the user to remove
+      responses:
+        '204':
+          description: Removal successful
+        '401':
+          description: Removal unauthorized
+        '404':
+          description: Resource doesn't exist
 
-  #/users/{id}:
-  #  get:
+  /users/{id}:
+    get:
+      description: Get information on this user
+      operationId: getUser
+      tags:
+        - users
+      produces:
+        - application/json
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: Numeric ID of the user to retrieve
+      responses:
+        '200':
+          description: Details of the user
+          schema:
+            $ref: '#/definitions/user'
+        '401':
+          description: Not authorized
+        '404':
+          description: Resource doesn't exist
 
-  #/session:
+  /session:
+    post:
+      description: Get JWT token for this user
+      operationId: getToken
+      tags:
+        - session
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: credentials
+          required: true
+          description: Credentials of the user to log in
+          schema:
+            $ref: '#/definitions/credentials'
+      responses:
+        '200':
+          description: Details of the user
+          schema:
+            $ref: '#/definitions/token'
+        '401':
+          description: Not authorized
+        '404':
+          description: Resource doesn't exist
 
 definitions:
   user:
@@ -78,3 +169,17 @@ definitions:
       password:
         type: string
         format: password
+  credentials:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+        format: email
+      password:
+        type: string
+        format: password
+  token:
+    type: string
