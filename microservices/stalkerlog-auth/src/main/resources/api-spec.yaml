@@ -57,37 +57,6 @@ paths:
           description: Bad request
         '401':
           description: Unauthorized (must be an admin)
-  /users:
-    put:
-      description: Update the specified user
-      operationId: putUser
-      tags:
-        - users
-      consumes:
-        - application/json
-      security:
-        - Bearer: []
-      parameters:
-        - in: path
-          name: id
-          type: integer
-          required: true
-          description: Numeric ID of the user to update
-        - in: body
-          name: user
-          description: The updated user data
-          required: true
-          schema:
-              $ref: '#/definitions/user'
-      responses:
-        '200':
-          description: Update successful
-        '400':
-          description: Bad request
-        '401':
-          description: Update unauthorized
-        '404':
-          description: Resource doesn't exist
 
   /users/{id}:
     get:
@@ -114,6 +83,37 @@ paths:
           description: Unauthorized
         '404':
           description: Resource doesn't exist
+    put:
+        description: Update the specified user
+        operationId: putUser
+        tags:
+            - users
+        consumes:
+            - application/json
+        security:
+            - Bearer: []
+        parameters:
+            - in: path
+              name: id
+              type: integer
+              required: true
+              description: Numeric ID of the user to update
+            - in: body
+              name: user
+              description: The updated user data
+              required: true
+              schema:
+                  $ref: '#/definitions/user'
+        responses:
+            '200':
+                description: Update successful
+            '400':
+                description: Bad request
+            '401':
+                description: Update unauthorized
+            '404':
+                description: Resource doesn't exist
+
     delete:
         description: Delete the specified user
         operationId: deleteUser
