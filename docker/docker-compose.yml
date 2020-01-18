@@ -16,7 +16,7 @@ services:
       - ./traefik.toml:/etc/traefik/traefik.toml
 
   # MySQL DB
-  db:
+  api-db:
     image: mysql:5.7.28
     container_name: stalkerlog-db
     restart: on-failure
@@ -37,12 +37,26 @@ services:
     environment:
         spring_profiles_active: docker
     depends_on:
-      - db
+      - api-db
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.main.entrypoints=web"
       - "traefik.http.routers.main.rule=Host(`localhost`) && PathPrefix(`/api`)"
       - "traefik.http.services.main.loadbalancer.server.port=8080"
+
+  # MySQL DB
+  auth-db:
+    image: mysql:5.7.28
+    container_name: stalkerlog-auth-db
+    restart: on-failure
+    command: --default-authentication-plugin=mysql_native_password --max-allowed-packet=300M
+    environment:
+      MYSQL_DATABASE: stalkerlog-auth
+      MYSQL_ROOT_PASSWORD: pwd
+    ports:
+      - 3307:3306
+    labels:
+      - "traefik.enable=false"
 
   # Auth API for stalkerlog app
   stalkerlog-auth:
@@ -52,7 +66,7 @@ services:
     environment:
         spring_profiles_active: docker
     depends_on:
-      - db
+      - auth-db
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.auth.entrypoints=web"
