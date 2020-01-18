@@ -17,7 +17,7 @@ public class SwaggerDocumentationConfig {
     ApiInfo apiInfo() {
         return new ApiInfoBuilder()
             .title("Stalkerlog Auth API")
-            .description("API register users and get a JWT token.")
+            .description("API to register users and get a JWT token.")
             .license("MIT")
             .licenseUrl("http://opensource.org/licenses/MIT")
             .version("0.1.0")

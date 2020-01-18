@@ -20,10 +20,11 @@ public class UsersApiController implements UsersApi {
     @Autowired
     UserRepository userRepository;
 
+    @Override
     public ResponseEntity<User> getUser(Integer id) {
         Optional<UserEntity> userEntity = userRepository.findById(Long.valueOf(id));
+        // TODO Check owner
         if(userEntity.isPresent()) {
-            // TODO check owner
             User user = toUser(userEntity.get());
             return ResponseEntity.ok(user);
         } else {
