@@ -15,10 +15,6 @@ import java.io.Serializable;
 @Table(name = "user")
 public class UserEntity implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
-    private long id;
-
     @Getter
     @Setter
     private String email;
@@ -34,4 +30,8 @@ public class UserEntity implements Serializable {
     @Getter
     @Setter
     private String password;
+
+    @Getter
+    @Setter
+    private boolean isAdmin;
 }

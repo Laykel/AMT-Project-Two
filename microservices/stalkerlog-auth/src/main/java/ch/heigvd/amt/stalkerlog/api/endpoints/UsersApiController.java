@@ -4,6 +4,8 @@ import ch.heigvd.amt.stalkerlog.api.UsersApi;
 import ch.heigvd.amt.stalkerlog.api.model.User;
 import ch.heigvd.amt.stalkerlog.entities.UserEntity;
 import ch.heigvd.amt.stalkerlog.repositories.UserRepository;
+import ch.heigvd.amt.stalkerlog.services.UserService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,15 +18,21 @@ import java.util.Optional;
  * @author Alison Savary, Luc Wachter
  */
 @Controller
+@Api(tags = "users")
 public class UsersApiController implements UsersApi {
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserService userService;
 
     @Override
     public ResponseEntity<User> getUser(Integer id) {
         Optional<UserEntity> userEntity = userRepository.findById(Long.valueOf(id));
         // TODO Check owner
-        if(userEntity.isPresent()) {
+        userService.createJWTString(userEntity.get()); // TEST
+
+        if (userEntity.isPresent()) {
             User user = toUser(userEntity.get());
             return ResponseEntity.ok(user);
         } else {
