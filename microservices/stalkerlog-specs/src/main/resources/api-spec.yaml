@@ -9,7 +9,7 @@ info:
   license:
     name: MIT
     url: http://opensource.org/licenses/MIT
-host: localhost
+host: localhost:8080
 basePath: /api
 schemes:
   - http
@@ -21,12 +21,14 @@ schemes:
 #    in: header
 
 tags:
-- name: visits
-  description: Retrieve your star's visits and create, update or delete a new visit
-- name: stars
-  description: Retrieve the list of stars and create, update or delete a new star
-- name: cities
-  description: Retrieve the list of cities or countries
+  - name: visits
+    description: Retrieve your star's visits and create, update or delete a new visit
+  - name: stars
+    description: Retrieve the list of stars and create, update or delete a new star
+  - name: cities
+    description: Retrieve the list of cities
+  - name: countries
+    description: Retrieve the list of countries
 
 paths:
   # TODO security
@@ -55,12 +57,12 @@ paths:
               description: URL of the created resource
               type: string
         '400':
-          description: The provided city doesn't exist
+          description: The provided city or star doesn't exist
         '401':
           description: Creation unauthorized
-    # TODO add pagination
+    # TODO add pagination, add getVisits(starId) ?
     get:
-      description: List all of this star's visits
+      description: List all of this user's visits
       operationId: getVisits
       tags:
         - visits
@@ -112,6 +114,12 @@ paths:
           type: integer
           required: true
           description: Numeric ID of the visit to retrieve
+        - name: visit
+          in: body
+          description: The star's visit to a city
+          required: true
+          schema:
+            $ref: '#/definitions/visit'
       responses:
         '200':
           description: Update successful
@@ -162,7 +170,7 @@ paths:
       description: List all of the countries
       operationId: getCountries
       tags:
-        - cities
+        - countries
       produces:
         - application/json
       responses:
@@ -253,6 +261,12 @@ paths:
           type: integer
           required: true
           description: Numeric ID of the star to update
+        - name: star
+          in: body
+          description: The star's name and platform
+          required: true
+          schema:
+            $ref: '#/definitions/star'
       responses:
         '200':
           description: Update successful
@@ -316,16 +330,16 @@ definitions:
       platform:
         type: string
   city:
-      type: object
-      required:
-        - name
-        - countryId
-      properties:
-        name:
-          type: string
-        countryId:
-          type: integer
-          format: int64
+    type: object
+    required:
+      - name
+      - countryId
+    properties:
+      name:
+        type: string
+      countryId:
+        type: integer
+        format: int64
   country:
     type: object
     required:

@@ -2,7 +2,6 @@ package ch.heigvd.amt.stalkerlog.api.spec.steps;
 
 import ch.heigvd.amt.stalkerlog.ApiException;
 import ch.heigvd.amt.stalkerlog.ApiResponse;
-import ch.heigvd.amt.stalkerlog.api.CitiesApi;
 import ch.heigvd.amt.stalkerlog.api.StarsApi;
 import ch.heigvd.amt.stalkerlog.api.dto.Star;
 import ch.heigvd.amt.stalkerlog.api.spec.helpers.Environment;
@@ -16,19 +15,14 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by Olivier Liechti on 27/07/17.
  */
-public class CreationSteps {
+public class StarSteps {
 
     private Environment environment;
     private StarsApi starsApi;
 
     Star star;
 
-    private ApiResponse lastApiResponse;
-    private ApiException lastApiException;
-    private boolean lastApiCallThrewException;
-    private int lastStatusCode;
-
-    public CreationSteps(Environment environment) {
+    public StarSteps(Environment environment) {
         this.environment = environment;
         this.starsApi = environment.getStarsApi();
     }
@@ -41,27 +35,22 @@ public class CreationSteps {
     @Given("^I have a star payload$")
     public void i_have_a_star_payload() throws Throwable {
         star = new ch.heigvd.amt.stalkerlog.api.dto.Star();
+        star.setName("Test");
+        star.setPlatform("Test");
     }
 
     @When("^I POST it to the /stars endpoint$")
     public void i_POST_it_to_the_stars_endpoint() throws Throwable {
         try {
-            lastApiResponse = starsApi.postStarWithHttpInfo(star);
-            lastApiCallThrewException = false;
-            lastApiException = null;
-            lastStatusCode = lastApiResponse.getStatusCode();
+            environment.setLastApiResponse(starsApi.postStarWithHttpInfo(star));
+            environment.setLastApiCallThrewException(false);
+            environment.setLastApiException(null);
+            environment.setLastStatusCode(environment.getLastApiResponse().getStatusCode());
         } catch (ApiException e) {
-            lastApiCallThrewException = true;
-            lastApiResponse = null;
-            lastApiException = e;
-            lastStatusCode = lastApiException.getCode();
+            environment.setLastApiCallThrewException(true);
+            environment.setLastApiResponse(null);
+            environment.setLastApiException(e);
+            environment.setLastStatusCode(e.getCode());
         }
-
     }
-
-    @Then("^I receive a (\\d+) status code$")
-    public void i_receive_a_status_code(int arg1) throws Throwable {
-        assertEquals(201, lastStatusCode);
-    }
-
 }

@@ -9,7 +9,7 @@ info:
   license:
     name: MIT
     url: http://opensource.org/licenses/MIT
-host: localhost
+host: localhost:8080
 basePath: /api
 schemes:
   - http
@@ -26,7 +26,9 @@ tags:
 - name: stars
   description: Retrieve the list of stars and create, update or delete a new star
 - name: cities
-  description: Retrieve the list of cities or countries
+  description: Retrieve the list of cities
+- name: countries
+  description: Retrieve the list of countries
 
 paths:
   # TODO security
@@ -168,7 +170,7 @@ paths:
       description: List all of the countries
       operationId: getCountries
       tags:
-        - cities
+        - countries
       produces:
         - application/json
       responses:

@@ -1,6 +1,9 @@
 package ch.heigvd.amt.stalkerlog.api.spec.helpers;
 
+import ch.heigvd.amt.stalkerlog.ApiException;
+import ch.heigvd.amt.stalkerlog.ApiResponse;
 import ch.heigvd.amt.stalkerlog.api.CitiesApi;
+import ch.heigvd.amt.stalkerlog.api.CountriesApi;
 import ch.heigvd.amt.stalkerlog.api.StarsApi;
 import ch.heigvd.amt.stalkerlog.api.VisitsApi;
 
@@ -15,6 +18,12 @@ public class Environment {
     private CitiesApi citiesApi = new CitiesApi();
     private StarsApi starsApi = new StarsApi();
     private VisitsApi visitsApi = new VisitsApi();
+    private CountriesApi countriesApi = new CountriesApi();
+
+    private ApiResponse lastApiResponse;
+    private ApiException lastApiException;
+    private boolean lastApiCallThrewException;
+    private int lastStatusCode;
 
     public Environment() throws IOException {
         Properties properties = new Properties();
@@ -23,7 +32,7 @@ public class Environment {
         citiesApi.getApiClient().setBasePath(url);
         starsApi.getApiClient().setBasePath(url);
         visitsApi.getApiClient().setBasePath(url);
-
+        countriesApi.getApiClient().setBasePath(url);
     }
 
     public CitiesApi getCitiesApi() {
@@ -38,4 +47,39 @@ public class Environment {
         return visitsApi;
     }
 
+    public CountriesApi getCountriesApi() {
+        return countriesApi;
+    }
+
+    public ApiResponse getLastApiResponse() {
+        return lastApiResponse;
+    }
+
+    public void setLastApiResponse(ApiResponse lastApiResponse) {
+        this.lastApiResponse = lastApiResponse;
+    }
+
+    public ApiException getLastApiException() {
+        return lastApiException;
+    }
+
+    public void setLastApiException(ApiException lastApiException) {
+        this.lastApiException = lastApiException;
+    }
+
+    public boolean isLastApiCallThrewException() {
+        return lastApiCallThrewException;
+    }
+
+    public void setLastApiCallThrewException(boolean lastApiCallThrewException) {
+        this.lastApiCallThrewException = lastApiCallThrewException;
+    }
+
+    public int getLastStatusCode() {
+        return lastStatusCode;
+    }
+
+    public void setLastStatusCode(int lastStatusCode) {
+        this.lastStatusCode = lastStatusCode;
+    }
 }
