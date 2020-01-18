@@ -35,8 +35,8 @@ public class StarsApiController implements StarsApi {
         starRepository.save(newStarEntity);
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}")
-                .buildAndExpand(newStarEntity.getId()).toUri();
+            .fromCurrentRequest().path("/{id}")
+            .buildAndExpand(newStarEntity.getId()).toUri();
 
         return ResponseEntity.created(location).build();
     }
@@ -55,7 +55,7 @@ public class StarsApiController implements StarsApi {
     public ResponseEntity<Star> getStar(Integer id) {
         Optional<StarEntity> starEntity = starRepository.findById(Long.valueOf(id));
         // Star exists in database
-        if(starEntity.isPresent()) {
+        if (starEntity.isPresent()) {
             // TODO check owner
             Star star = toStar(starEntity.get());
             return ResponseEntity.ok(star);
@@ -68,7 +68,7 @@ public class StarsApiController implements StarsApi {
     public ResponseEntity<Void> putStar(Integer id, @Valid Star star) {
         StarEntity starEntity = toStarEntity(star);
         // Star exists in database
-        if(starRepository.findById(Long.valueOf(id)).isPresent()) {
+        if (starRepository.findById(Long.valueOf(id)).isPresent()) {
             // TODO check owner
             // TODO PROBABLY NOT HOW IT SHOULD BE DONE
             starEntity.setId(id);
@@ -81,7 +81,7 @@ public class StarsApiController implements StarsApi {
 
     @Override
     public ResponseEntity<Void> deleteStar(Integer id) {
-        if(starRepository.findById(Long.valueOf(id)).isPresent()) {
+        if (starRepository.findById(Long.valueOf(id)).isPresent()) {
             // TODO check owner
             starRepository.deleteById(Long.valueOf(id));
             return ResponseEntity.status(204).build();
