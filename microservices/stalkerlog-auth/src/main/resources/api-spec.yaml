@@ -14,30 +14,31 @@ basePath: /auth
 schemes:
   - http
 
+tags:
+  - name: users
+    description: Create a new user (register), retrieve your information or update it
+  - name: session
+    description: Retrieve a JWT token...
+  - name: admin
+    description: Operations available only to admin users
+
 securityDefinitions:
   Bearer:
     type: apiKey
     name: Authorization
     in: header
 
-tags:
-- name: users
-  description: Create a new user (register), retrieve your information or update it
-- name: session
-  description: Retrieve a JWT token...
-
 paths:
-  /users:
+  /registration:
     post:
       description: Create a new user
       operationId: postUser
       tags:
-        - users
+        - admin
       consumes:
         - application/json
-      # TODO only admins can create users
-      #security:
-        #- Bearer: []
+      security:
+        - Bearer: []
       parameters:
         - name: user
           in: body
@@ -54,6 +55,9 @@ paths:
               type: string
         '400':
           description: Bad request
+        '401':
+          description: Unauthorized (must be an admin)
+  /users:
     put:
       description: Update the specified user
       operationId: putUser
@@ -69,6 +73,12 @@ paths:
           type: integer
           required: true
           description: Numeric ID of the user to update
+        - in: body
+          name: user
+          description: The updated user data
+          required: true
+          schema:
+              $ref: '#/definitions/user'
       responses:
         '200':
           description: Update successful
@@ -76,26 +86,6 @@ paths:
           description: Bad request
         '401':
           description: Update unauthorized
-        '404':
-          description: Resource doesn't exist
-    delete:
-      description: Delete the specified user
-      operationId: deleteUser
-      tags:
-        - users
-      security:
-        - Bearer: []
-      parameters:
-        - in: path
-          name: id
-          type: integer
-          required: true
-          description: Numeric ID of the user to remove
-      responses:
-        '204':
-          description: Removal successful
-        '401':
-          description: Removal unauthorized
         '404':
           description: Resource doesn't exist
 
@@ -121,9 +111,29 @@ paths:
           schema:
             $ref: '#/definitions/user'
         '401':
-          description: Not authorized
+          description: Unauthorized
         '404':
           description: Resource doesn't exist
+    delete:
+        description: Delete the specified user
+        operationId: deleteUser
+        tags:
+            - users
+        security:
+            - Bearer: []
+        parameters:
+            - in: path
+              name: id
+              type: integer
+              required: true
+              description: Numeric ID of the user to remove
+        responses:
+            '204':
+                description: Removal successful
+            '401':
+                description: Removal unauthorized
+            '404':
+                description: Resource doesn't exist
 
   /session:
     post:
@@ -146,7 +156,7 @@ paths:
           schema:
             $ref: '#/definitions/token'
         '401':
-          description: Not authorized
+          description: Unauthorized
         '404':
           description: Resource doesn't exist
 

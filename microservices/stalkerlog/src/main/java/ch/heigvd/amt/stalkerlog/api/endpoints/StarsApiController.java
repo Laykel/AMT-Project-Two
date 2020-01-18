@@ -29,6 +29,7 @@ public class StarsApiController implements StarsApi {
     @Autowired
     StarRepository starRepository;
 
+    @Override
     public ResponseEntity<Void> postStar(@ApiParam(value = "", required = true) @Valid @RequestBody Star star) {
         StarEntity newStarEntity = toStarEntity(star);
         starRepository.save(newStarEntity);
@@ -40,6 +41,7 @@ public class StarsApiController implements StarsApi {
         return ResponseEntity.created(location).build();
     }
 
+    @Override
     public ResponseEntity<List<Star>> getStars() {
         List<Star> stars = new ArrayList<>();
         // TODO stars of user
@@ -49,6 +51,7 @@ public class StarsApiController implements StarsApi {
         return ResponseEntity.ok(stars);
     }
 
+    @Override
     public ResponseEntity<Star> getStar(Integer id) {
         Optional<StarEntity> starEntity = starRepository.findById(Long.valueOf(id));
         // Star exists in database
@@ -61,11 +64,13 @@ public class StarsApiController implements StarsApi {
         }
     }
 
+    @Override
     public ResponseEntity<Void> putStar(Integer id, @Valid Star star) {
         StarEntity starEntity = toStarEntity(star);
         // Star exists in database
         if(starRepository.findById(Long.valueOf(id)).isPresent()) {
             // TODO check owner
+            // TODO PROBABLY NOT HOW IT SHOULD BE DONE
             starEntity.setId(id);
             starRepository.save(starEntity);
             return ResponseEntity.ok().build();

@@ -23,6 +23,7 @@ public class CountriesApiController implements CountriesApi {
     @Autowired
     CountryRepository countryRepository;
 
+    @Override
     public ResponseEntity<List<Country>> getCountries() {
         List<Country> countries = new ArrayList<>();
         for (CountryEntity countryEntity : countryRepository.findAll()) {

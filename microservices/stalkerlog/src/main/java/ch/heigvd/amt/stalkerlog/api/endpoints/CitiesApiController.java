@@ -23,6 +23,7 @@ public class CitiesApiController implements CitiesApi {
     @Autowired
     CityRepository cityRepository;
 
+    @Override
     public ResponseEntity<List<City>> getCities() {
         List<City> countries = new ArrayList<>();
         for (CityEntity cityEntity : cityRepository.findAll()) {
