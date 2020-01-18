@@ -2,7 +2,7 @@ swagger: '2.0'
 info:
   version: '0.1.0'
   title: Stalkerlog Auth API
-  description: API register users and get a JWT token.
+  description: API to register users and get a JWT token.
   contact:
     name: Stalkerlog team
     email: luc.wachter@heig-vd.ch
