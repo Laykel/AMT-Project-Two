@@ -1,13 +1,11 @@
 package ch.heigvd.amt.stalkerlog.api.spec.steps;
 
 import ch.heigvd.amt.stalkerlog.ApiException;
-import ch.heigvd.amt.stalkerlog.ApiResponse;
 import ch.heigvd.amt.stalkerlog.api.CountriesApi;
 import ch.heigvd.amt.stalkerlog.api.dto.Country;
 import ch.heigvd.amt.stalkerlog.api.spec.helpers.Environment;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 import java.util.ArrayList;
@@ -25,12 +23,12 @@ public class CountrySteps {
     }
 
     @Given("^there is a Countries server$")
-    public void there_is_a_Stars_server() throws Throwable {
+    public void there_is_a_Countries_server() throws Throwable {
         assertNotNull(countriesApi);
     }
 
     @When("^I GET the /countries endpoint$")
-    public void i_get_the_countries_endpoint() {
+    public void i_GET_the_countries_endpoint() {
         try {
             environment.setLastApiResponse(countriesApi.getCountriesWithHttpInfo());
             environment.setLastApiCallThrewException(false);

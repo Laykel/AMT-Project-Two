@@ -24,6 +24,7 @@ public class Environment {
     private ApiException lastApiException;
     private boolean lastApiCallThrewException;
     private int lastStatusCode;
+    private int lastEntityId;
 
     public Environment() throws IOException {
         Properties properties = new Properties();
@@ -81,5 +82,13 @@ public class Environment {
 
     public void setLastStatusCode(int lastStatusCode) {
         this.lastStatusCode = lastStatusCode;
+    }
+
+    public int getLastEntityId() {
+        return lastEntityId;
+    }
+
+    public void setLastEntityId(int lastEntityId) {
+        this.lastEntityId = lastEntityId;
     }
 }

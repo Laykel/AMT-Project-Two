@@ -1,16 +1,13 @@
 package ch.heigvd.amt.stalkerlog.api.spec.steps;
 
 import ch.heigvd.amt.stalkerlog.ApiException;
-import ch.heigvd.amt.stalkerlog.ApiResponse;
 import ch.heigvd.amt.stalkerlog.api.StarsApi;
 import ch.heigvd.amt.stalkerlog.api.dto.Star;
 import ch.heigvd.amt.stalkerlog.api.spec.helpers.Environment;
 import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Olivier Liechti on 27/07/17.
@@ -21,6 +18,7 @@ public class StarSteps {
     private StarsApi starsApi;
 
     Star star;
+    Integer starId = null;
 
     public StarSteps(Environment environment) {
         this.environment = environment;
@@ -35,7 +33,7 @@ public class StarSteps {
     @Given("^I have a star payload$")
     public void i_have_a_star_payload() throws Throwable {
         star = new ch.heigvd.amt.stalkerlog.api.dto.Star();
-        star.setName("Test");
+        star.setName("Star" + System.currentTimeMillis());
         star.setPlatform("Test");
     }
 
