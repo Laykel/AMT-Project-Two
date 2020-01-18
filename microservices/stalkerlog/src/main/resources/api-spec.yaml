@@ -55,12 +55,12 @@ paths:
               description: URL of the created resource
               type: string
         '400':
-          description: The provided city doesn't exist
+          description: The provided city or star doesn't exist
         '401':
           description: Creation unauthorized
-    # TODO add pagination
+    # TODO add pagination, add getVisits(starId) ?
     get:
-      description: List all of this star's visits
+      description: List all of this user's visits
       operationId: getVisits
       tags:
         - visits
@@ -112,6 +112,12 @@ paths:
           type: integer
           required: true
           description: Numeric ID of the visit to retrieve
+        - name: visit
+          in: body
+          description: The star's visit to a city
+          required: true
+          schema:
+            $ref: '#/definitions/visit'
       responses:
         '200':
           description: Update successful

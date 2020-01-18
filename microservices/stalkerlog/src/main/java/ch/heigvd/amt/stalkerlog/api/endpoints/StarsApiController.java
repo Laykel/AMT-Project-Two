@@ -40,6 +40,7 @@ public class StarsApiController implements StarsApi {
 
     public ResponseEntity<List<Star>> getStars() {
         List<Star> stars = new ArrayList<>();
+        // TODO stars of user
         for (StarEntity starEntity : starRepository.findAll()) {
             stars.add(toStar(starEntity));
         }
@@ -48,6 +49,7 @@ public class StarsApiController implements StarsApi {
 
     public ResponseEntity<Star> getStar(Integer id) {
         Optional<StarEntity> starEntity = starRepository.findById(Long.valueOf(id));
+        // Star exists in database
         if(starEntity.isPresent()) {
             // TODO check owner
             Star star = toStar(starEntity.get());

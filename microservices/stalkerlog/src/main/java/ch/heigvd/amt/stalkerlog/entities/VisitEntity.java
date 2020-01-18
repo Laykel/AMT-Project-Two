@@ -18,6 +18,7 @@ public class VisitEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
+    @Setter
     private long id;
 
     @Getter
