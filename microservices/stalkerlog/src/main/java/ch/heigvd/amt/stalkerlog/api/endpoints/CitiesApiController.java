@@ -4,6 +4,7 @@ import ch.heigvd.amt.stalkerlog.api.CitiesApi;
 import ch.heigvd.amt.stalkerlog.api.model.City;
 import ch.heigvd.amt.stalkerlog.entities.CityEntity;
 import ch.heigvd.amt.stalkerlog.repositories.CityRepository;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import java.util.List;
  * @author Alison Savary, Luc Wachter
  */
 @Controller
+@Api(tags = "cities")
 public class CitiesApiController implements CitiesApi {
     @Autowired
     CityRepository cityRepository;

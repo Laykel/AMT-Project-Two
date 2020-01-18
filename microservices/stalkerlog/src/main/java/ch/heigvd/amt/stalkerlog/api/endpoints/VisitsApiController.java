@@ -6,6 +6,7 @@ import ch.heigvd.amt.stalkerlog.entities.VisitEntity;
 import ch.heigvd.amt.stalkerlog.repositories.CityRepository;
 import ch.heigvd.amt.stalkerlog.repositories.StarRepository;
 import ch.heigvd.amt.stalkerlog.repositories.VisitRepository;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import java.util.Optional;
  * @author Alison Savary, Luc Wachter
  */
 @Controller
+@Api(tags = "visits")
 public class VisitsApiController implements VisitsApi {
     @Autowired
     VisitRepository visitRepository;

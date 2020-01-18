@@ -4,6 +4,7 @@ import ch.heigvd.amt.stalkerlog.api.CountriesApi;
 import ch.heigvd.amt.stalkerlog.entities.CountryEntity;
 import ch.heigvd.amt.stalkerlog.api.model.Country;
 import ch.heigvd.amt.stalkerlog.repositories.CountryRepository;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import java.util.List;
  * @author Alison Savary, Luc Wachter
  */
 @Controller
+@Api(tags = "cities")
 public class CountriesApiController implements CountriesApi {
     @Autowired
     CountryRepository countryRepository;

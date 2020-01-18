@@ -4,6 +4,7 @@ import ch.heigvd.amt.stalkerlog.api.StarsApi;
 import ch.heigvd.amt.stalkerlog.api.model.Star;
 import ch.heigvd.amt.stalkerlog.entities.StarEntity;
 import ch.heigvd.amt.stalkerlog.repositories.StarRepository;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import java.util.Optional;
  * @author Alison Savary, Luc Wachter
  */
 @Controller
+@Api(tags = "stars")
 public class StarsApiController implements StarsApi {
     @Autowired
     StarRepository starRepository;

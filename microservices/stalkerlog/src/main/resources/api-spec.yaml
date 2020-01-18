@@ -26,9 +26,7 @@ tags:
 - name: stars
   description: Retrieve the list of stars and create, update or delete a new star
 - name: cities
-  description: Retrieve the list of cities
-- name: countries
-  description: Retrieve the list of countries
+  description: Retrieve the list of cities or countries
 
 paths:
   # TODO security
@@ -170,7 +168,7 @@ paths:
       description: List all of the countries
       operationId: getCountries
       tags:
-        - countries
+        - cities
       produces:
         - application/json
       responses:
