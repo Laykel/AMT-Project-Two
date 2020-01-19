@@ -80,7 +80,6 @@ public class StarsApiController implements StarsApi {
             if (owner != starEntity.get().getOwner()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
-
             return ResponseEntity.ok(star);
         } else {
             return ResponseEntity.notFound().build();

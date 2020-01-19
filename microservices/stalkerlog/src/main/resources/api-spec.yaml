@@ -112,9 +112,9 @@ paths:
           description: Not authorized
         '404':
           description: Resource doesn't exist
-    patch:
-      description: Update some fields of the specified visit
-      operationId: patchVisit
+    put:
+      description: Update the specified visit
+      operationId: putVisit
       tags:
         - visits
       consumes:
@@ -137,7 +137,7 @@ paths:
         '200':
           description: Update successful
         '400':
-          description: The provided city doesn't exist
+          description: The provided city doesn't exist or star
         '401':
           description: Update unauthorized
         '404':

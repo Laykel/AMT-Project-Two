@@ -48,7 +48,7 @@ public class VisitsApiController implements VisitsApi {
         long owner = (Long) request.getAttribute("userId");
 
         // Check if star and city exist
-        if (starEntity.isPresent() && cityRepository.findById(visit.getCityId()).isPresent()) {
+        if (starEntity.isPresent() && cityRepository.existsById(visit.getCityId())) {
             // Check if this star belongs to that user
             if (owner != starEntity.get().getOwner()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -97,7 +97,6 @@ public class VisitsApiController implements VisitsApi {
             if (owner != visitEntity.get().getOwner()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
-
             return ResponseEntity.ok(visit);
         } else {
             return ResponseEntity.notFound().build();
@@ -105,11 +104,12 @@ public class VisitsApiController implements VisitsApi {
     }
 
     @Override
-    public ResponseEntity<Void> patchVisit(Integer id, @Valid Visit visit) {
+    public ResponseEntity<Void> putVisit(Integer id, @Valid Visit visit) {
         long owner = (Long) request.getAttribute("userId");
         VisitEntity updatedEntity = toVisitEntity(visit, owner);
 
         Optional<VisitEntity> visitEntity = visitRepository.findById(Long.valueOf(id));
+        Optional<StarEntity> starEntity = starRepository.findById(visit.getStarId());
 
         // Visit exists in database
         if (visitEntity.isPresent()) {
@@ -117,7 +117,15 @@ public class VisitsApiController implements VisitsApi {
             if (owner != visitEntity.get().getOwner()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
-
+            // Check if city and star exist in DB
+            if (starEntity.isPresent() && cityRepository.existsById(visit.getCityId())) {
+                // Check if this star belongs to that user
+                if (owner != starEntity.get().getOwner()) {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                }
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
             updatedEntity.setId(id);
             visitRepository.save(updatedEntity);
             return ResponseEntity.ok().build();
