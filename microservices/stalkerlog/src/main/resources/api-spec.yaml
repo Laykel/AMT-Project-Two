@@ -155,9 +155,18 @@ paths:
         - cities
       produces:
         - application/json
+      parameters:
+        - in: query
+          name: page
+          type: integer
+          description: Number of the page to return
+        - in: query
+          name: pageSize
+          type: integer
+          description: The numbers of items to return
       responses:
         '200':
-          description: List of all cities
+          description: List of all cities of the page
           schema:
             type: array
             items:

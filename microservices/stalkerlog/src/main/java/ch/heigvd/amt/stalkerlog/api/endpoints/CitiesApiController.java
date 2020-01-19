@@ -6,9 +6,12 @@ import ch.heigvd.amt.stalkerlog.entities.CityEntity;
 import ch.heigvd.amt.stalkerlog.repositories.CityRepository;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,12 +27,17 @@ public class CitiesApiController implements CitiesApi {
     CityRepository cityRepository;
 
     @Override
-    public ResponseEntity<List<City>> getCities() {
-        List<City> countries = new ArrayList<>();
-        for (CityEntity cityEntity : cityRepository.findAll()) {
-            countries.add(toCity(cityEntity));
+    public ResponseEntity<List<City>> getCities(@Valid Integer page, @Valid Integer pageSize) {
+        List<City> cities = new ArrayList<>();
+        for (CityEntity cityEntity : cityRepository.findAllByOrderByName(PageRequest.of(page - 1, pageSize))) {
+            cities.add(toCity(cityEntity));
         }
-        return ResponseEntity.ok(countries);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Pagination-NumberOfItems", String.valueOf(cityRepository.count()));
+        responseHeaders.set("Pagination-Next", "/cities?page=" + (page + 1) + "&pageSize="+ pageSize);
+        return ResponseEntity.ok()
+                .headers(responseHeaders)
+                .body(cities);
     }
 
     private City toCity(CityEntity entity) {
