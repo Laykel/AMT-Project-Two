@@ -7,6 +7,8 @@ import ch.heigvd.amt.stalkerlog.repositories.StarRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,13 +44,18 @@ public class StarsApiController implements StarsApi {
     }
 
     @Override
-    public ResponseEntity<List<Star>> getStars() {
+    public ResponseEntity<List<Star>> getStars(@Valid Integer page, @Valid Integer pageSize) {
         List<Star> stars = new ArrayList<>();
         // TODO stars of user
-        for (StarEntity starEntity : starRepository.findAll()) {
+        for (StarEntity starEntity : starRepository.findAllByOrderByName(PageRequest.of(page - 1, pageSize))) {
             stars.add(toStar(starEntity));
         }
-        return ResponseEntity.ok(stars);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Pagination-NumberOfItems", String.valueOf(starRepository.count()));
+        responseHeaders.set("Pagination-Next", "/stars?page=" + (page + 1) + "&pageSize="+ pageSize);
+        return ResponseEntity.ok()
+                .headers(responseHeaders)
+                .body(stars);
     }
 
     @Override

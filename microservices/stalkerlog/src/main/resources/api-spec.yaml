@@ -58,7 +58,6 @@ paths:
           description: The provided city or star doesn't exist
         '401':
           description: Creation unauthorized
-    # TODO add pagination
     get:
       description: List all of this user's visits
       operationId: getVisits
@@ -232,6 +231,15 @@ paths:
         - stars
       produces:
         - application/json
+      parameters:
+        - in: query
+          name: page
+          type: integer
+          description: Number of the page to return
+        - in: query
+          name: pageSize
+          type: integer
+          description: The numbers of items to return
       responses:
         '200':
           description: List of all the stars
