@@ -2,6 +2,7 @@ package ch.heigvd.amt.stalkerlog.api.endpoints;
 
 import ch.heigvd.amt.stalkerlog.api.VisitsApi;
 import ch.heigvd.amt.stalkerlog.api.model.Visit;
+import ch.heigvd.amt.stalkerlog.entities.StarEntity;
 import ch.heigvd.amt.stalkerlog.entities.VisitEntity;
 import ch.heigvd.amt.stalkerlog.repositories.CityRepository;
 import ch.heigvd.amt.stalkerlog.repositories.StarRepository;
@@ -11,10 +12,12 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.ArrayList;
@@ -36,17 +39,27 @@ public class VisitsApiController implements VisitsApi {
     @Autowired
     CityRepository cityRepository;
 
+    @Autowired
+    private HttpServletRequest request;
+
     @Override
     public ResponseEntity<Void> postVisit(@ApiParam(value = "", required = true) @Valid Visit visit) {
-        // Check if star and visit exist
-        if(starRepository.findById(visit.getStarId()).isPresent() && cityRepository.findById(visit.getCityId()).isPresent()) {
-            // TODO Check if user owns star
-            VisitEntity newVisitEntity = toVisitEntity(visit);
+        Optional<StarEntity> starEntity = starRepository.findById(visit.getStarId());
+        long owner = (Long) request.getAttribute("userId");
+
+        // Check if star and city exist
+        if (starEntity.isPresent() && cityRepository.findById(visit.getCityId()).isPresent()) {
+            // Check if this star belongs to that user
+            if (owner != starEntity.get().getOwner()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            VisitEntity newVisitEntity = toVisitEntity(visit, owner);
             visitRepository.save(newVisitEntity);
 
             URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(newVisitEntity.getId()).toUri();
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(newVisitEntity.getId()).toUri();
 
             return ResponseEntity.created(location).build();
         } else {
@@ -57,24 +70,34 @@ public class VisitsApiController implements VisitsApi {
     @Override
     public ResponseEntity<List<Visit>> getVisits(@Valid Integer page, @Valid Integer pageSize) {
         List<Visit> visits = new ArrayList<>();
-        // TODO visits of user
-        for(VisitEntity visitEntity : visitRepository.findAllByOrderByStar(PageRequest.of(page - 1, pageSize))) {
+        long owner = (Long) request.getAttribute("userId");
+
+        for (VisitEntity visitEntity :
+            visitRepository.findAllByOwnerOrderByStar(owner, PageRequest.of(page - 1, pageSize))) {
             visits.add(toVisit(visitEntity));
         }
+
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Pagination-NumberOfItems", String.valueOf(visitRepository.count()));
-        responseHeaders.set("Pagination-Next", "/visits?page=" + (page + 1) + "&pageSize="+ pageSize);
+        responseHeaders.set("Pagination-Next", "/visits?page=" + (page + 1) + "&pageSize=" + pageSize);
         return ResponseEntity.ok()
-                .headers(responseHeaders)
-                .body(visits);
+            .headers(responseHeaders)
+            .body(visits);
     }
 
     @Override
     public ResponseEntity<Visit> getVisit(Integer id) {
         Optional<VisitEntity> visitEntity = visitRepository.findById(Long.valueOf(id));
-        if(visitEntity.isPresent()) {
-            //TODO check owner
+        long owner = (Long) request.getAttribute("userId");
+
+        if (visitEntity.isPresent()) {
             Visit visit = toVisit(visitEntity.get());
+
+            // Check if this visit belongs to that user
+            if (owner != visitEntity.get().getOwner()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
             return ResponseEntity.ok(visit);
         } else {
             return ResponseEntity.notFound().build();
@@ -83,12 +106,20 @@ public class VisitsApiController implements VisitsApi {
 
     @Override
     public ResponseEntity<Void> patchVisit(Integer id, @Valid Visit visit) {
-        VisitEntity visitEntity = toVisitEntity(visit);
+        long owner = (Long) request.getAttribute("userId");
+        VisitEntity updatedEntity = toVisitEntity(visit, owner);
+
+        Optional<VisitEntity> visitEntity = visitRepository.findById(Long.valueOf(id));
+
         // Visit exists in database
-        if(visitRepository.findById(Long.valueOf(id)).isPresent()) {
-            // TODO check owner
-            visitEntity.setId(id);
-            visitRepository.save(visitEntity);
+        if (visitEntity.isPresent()) {
+            // Check if this visit belongs to that user
+            if (owner != visitEntity.get().getOwner()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            updatedEntity.setId(id);
+            visitRepository.save(updatedEntity);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
@@ -97,9 +128,16 @@ public class VisitsApiController implements VisitsApi {
 
     @Override
     public ResponseEntity<Void> deleteVisit(Integer id) {
+        Optional<VisitEntity> visitEntity = visitRepository.findById(Long.valueOf(id));
+        long owner = (Long) request.getAttribute("userId");
+
         // Visit exists in database
-        if(visitRepository.findById(Long.valueOf(id)).isPresent()) {
-            // TODO Check owner
+        if (visitEntity.isPresent()) {
+            // Check if this visit belongs to that user
+            if (owner != visitEntity.get().getOwner()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
             visitRepository.deleteById(Long.valueOf(id));
             return ResponseEntity.status(204).build();
         } else {
@@ -107,12 +145,13 @@ public class VisitsApiController implements VisitsApi {
         }
     }
 
-    private VisitEntity toVisitEntity(Visit visit) {
+    private VisitEntity toVisitEntity(Visit visit, long owner) {
         VisitEntity visitEntity = new VisitEntity();
         visitEntity.setStar(starRepository.findById(visit.getStarId()).get());
         visitEntity.setCity(cityRepository.findById(visit.getCityId()).get());
         visitEntity.setStartDate(visit.getStartDate());
         visitEntity.setEndDate(visit.getEndDate());
+        visitEntity.setOwner(owner);
         return visitEntity;
     }
 

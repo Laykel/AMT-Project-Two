@@ -11,5 +11,5 @@ import org.springframework.data.repository.CrudRepository;
  * @author Alison Savary, Luc Wachter
  */
 public interface VisitRepository extends CrudRepository<VisitEntity, Long> {
-    Page<VisitEntity> findAllByOrderByStar(Pageable pageable);
+    Page<VisitEntity> findAllByOwnerOrderByStar(long owner, Pageable pageable);
 }
