@@ -11,6 +11,7 @@ import java.security.Key;
  * @author Alison Savary, Luc Wachter
  */
 public class AuthUtils {
+    // TODO KEY IN ENV VARS
     private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public static String createJWTString(Long userId, boolean role) {

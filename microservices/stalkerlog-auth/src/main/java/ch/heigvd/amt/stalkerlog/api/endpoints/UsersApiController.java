@@ -6,9 +6,11 @@ import ch.heigvd.amt.stalkerlog.entities.UserEntity;
 import ch.heigvd.amt.stalkerlog.repositories.UserRepository;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Optional;
 
@@ -21,46 +23,58 @@ import java.util.Optional;
 @Api(tags = "users")
 public class UsersApiController implements UsersApi {
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
+
+    @Autowired
+    private HttpServletRequest request;
 
     @Override
     public ResponseEntity<Void> putUser(Integer id, @Valid User user) {
         UserEntity userEntity = toUserEntity(user);
 
+        if (request.getAttribute("userId") != Long.valueOf(id)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         // User exists in database
-        if(userRepository.findById(Long.valueOf(id)).isPresent()) {
-            // TODO check owner
+        if (userRepository.findById(Long.valueOf(id)).isPresent()) {
             // TODO PROBABLY NOT HOW IT SHOULD BE DONE
             userEntity.setId(id);
             userRepository.save(userEntity);
             return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
         }
+
+        return ResponseEntity.notFound().build();
     }
 
     @Override
     public ResponseEntity<User> getUser(Integer id) {
         Optional<UserEntity> userEntity = userRepository.findById(Long.valueOf(id));
 
-        // TODO Check owner
+        if (request.getAttribute("userId") != Long.valueOf(id)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         if (userEntity.isPresent()) {
             User user = toUser(userEntity.get());
             return ResponseEntity.ok(user);
-        } else {
-            return ResponseEntity.notFound().build();
         }
+
+        return ResponseEntity.notFound().build();
     }
 
     @Override
     public ResponseEntity<Void> deleteUser(Integer id) {
-        if(userRepository.findById(Long.valueOf(id)).isPresent()) {
-            // TODO check owner
+        if (request.getAttribute("userId") != Long.valueOf(id)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        if (userRepository.findById(Long.valueOf(id)).isPresent()) {
             userRepository.deleteById(Long.valueOf(id));
             return ResponseEntity.status(204).build();
-        } else {
-            return ResponseEntity.notFound().build();
         }
+
+        return ResponseEntity.notFound().build();
     }
 
     private UserEntity toUserEntity(User user) {

@@ -8,6 +8,7 @@ import ch.heigvd.amt.stalkerlog.repositories.UserRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,14 +32,11 @@ public class SessionApiController implements SessionApi {
 
         // Check user password
         if (!user.getPassword().equals(credentials.getPassword())) {
-            throw new IllegalArgumentException("Wrong password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Wrong password");
         }
 
-        try {
-            String jwt = AuthUtils.createJWTString(user.getId(), user.isAdmin());
-            return ResponseEntity.ok(jwt);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(401).body(e.getMessage());
-        }
+        // Create the JWT token and send it back as JSON
+        String jwt = AuthUtils.createJWTString(user.getId(), user.isAdmin());
+        return ResponseEntity.ok("{\"token\": \"" + jwt + "\"}");
     }
 }
