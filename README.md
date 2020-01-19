@@ -22,9 +22,13 @@ docker-compose up -d --build
 
 The main API should then be available at [this address](http://localhost/api) and the auth API at [this address](http://localhost/auth).
 
-**Warning:** a last minute issue that we couldn't fix broke the connection to the db containers from the API containers.
+**Warning:** a last minute issue that we couldn't fix broke the connection to the db containers from the API containers. Please read the next point to run the APIs.
+
+## Run the APIs without docker
 
 Launching the db containers and then the projects manually from IntelliJ still works... `docker-compose up apidb authdb`
+
+The APIs are then available at [this address](http://localhost:8080/api) and the auth API at [this address](http://localhost:8081/auth).
 
 ### Test data
 
@@ -36,6 +40,6 @@ We have one admin user and one simple user defined with the following credential
 - `admin@sl.ch`, `paSSw0rd`
 - `notadmin@gm.com`, `Sidney413`
 
-## How to run the tests
+## How to run the tests (Cucumber)
 
-...
+To run the few tests we managed to complete, be sure to have the stalkerlog project and its database running. Then in stalkerlog-specs, do a `mvn clean test`.
