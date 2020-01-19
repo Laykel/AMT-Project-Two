@@ -63,7 +63,7 @@ public class UsersApiController implements UsersApi {
         }
     }
 
-    public static UserEntity toUserEntity(User user) {
+    private UserEntity toUserEntity(User user) {
         UserEntity entity = new UserEntity();
         entity.setEmail(user.getEmail());
         entity.setFirstName(user.getFirstName());

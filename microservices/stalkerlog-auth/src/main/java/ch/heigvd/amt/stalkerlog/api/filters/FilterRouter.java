@@ -1,4 +1,4 @@
-package ch.heigvd.amt.stalkerlog.filters;
+package ch.heigvd.amt.stalkerlog.api.filters;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
