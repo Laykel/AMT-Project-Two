@@ -29,7 +29,7 @@ public class AdminFilter extends OncePerRequestFilter {
 
             // Check that the user is admin
             if (!user.isAdmin()) {
-                response.sendError(HttpStatus.UNAUTHORIZED.value(), "You must be admin to perform this action");
+                response.sendError(HttpStatus.UNAUTHORIZED.value(), "You must be an admin to perform this action");
                 return;
             }
         }

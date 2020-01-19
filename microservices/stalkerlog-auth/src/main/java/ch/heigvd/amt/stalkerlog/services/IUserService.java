@@ -1,6 +1,6 @@
 package ch.heigvd.amt.stalkerlog.services;
 
-import ch.heigvd.amt.stalkerlog.entities.UserEntity;
+import ch.heigvd.amt.stalkerlog.api.model.Credentials;
 
 /**
  * A service interface to manage user linked operations
@@ -8,7 +8,7 @@ import ch.heigvd.amt.stalkerlog.entities.UserEntity;
  * @author Alison Savary, Luc Wachter
  */
 public interface IUserService {
-    String createJWTString(UserEntity user);
+    String createJWTString(Credentials user);
 
     String decodeJWTString(String jwt);
 }

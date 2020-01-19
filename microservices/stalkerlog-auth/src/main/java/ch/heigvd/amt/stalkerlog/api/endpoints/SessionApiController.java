@@ -3,6 +3,7 @@ package ch.heigvd.amt.stalkerlog.api.endpoints;
 import ch.heigvd.amt.stalkerlog.api.SessionApi;
 import ch.heigvd.amt.stalkerlog.api.model.Credentials;
 import ch.heigvd.amt.stalkerlog.repositories.UserRepository;
+import ch.heigvd.amt.stalkerlog.services.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,15 @@ import javax.validation.Valid;
 @Api(tags = "session")
 public class SessionApiController implements SessionApi {
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @Override
     public ResponseEntity<String> getToken(@ApiParam(value = "", required = true) @Valid @RequestBody Credentials credentials) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        try {
+            String jwt = userService.createJWTString(credentials);
+            return ResponseEntity.ok(jwt);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(401).body(e.getMessage());
+        }
     }
 }
