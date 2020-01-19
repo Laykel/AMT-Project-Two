@@ -168,6 +168,7 @@ definitions:
       - firstName
       - lastName
       - password
+      - isAdmin
     properties:
       email:
         type: string
@@ -179,6 +180,8 @@ definitions:
       password:
         type: string
         format: password
+      isAdmin:
+        type: boolean
   credentials:
     type: object
     required:

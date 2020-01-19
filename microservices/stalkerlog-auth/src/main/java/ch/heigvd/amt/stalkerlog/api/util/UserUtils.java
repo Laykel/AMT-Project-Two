@@ -14,6 +14,7 @@ public class UserUtils {
         entity.setEmail(user.getEmail());
         entity.setFirstName(user.getFirstName());
         entity.setLastName(user.getLastName());
+        entity.setAdmin(user.getIsAdmin());
         // Hash password
         entity.setPassword(AuthUtils.hashPassword(user.getPassword()));
         return entity;
@@ -25,6 +26,7 @@ public class UserUtils {
         user.setFirstName(entity.getFirstName());
         user.setLastName(entity.getLastName());
         user.setPassword(entity.getPassword());
+        user.setIsAdmin(entity.isAdmin());
         return user;
     }
 }
