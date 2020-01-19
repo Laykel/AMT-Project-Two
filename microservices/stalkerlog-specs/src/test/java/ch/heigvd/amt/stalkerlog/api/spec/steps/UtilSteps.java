@@ -19,6 +19,12 @@ public class UtilSteps {
         assertNotNull(environment.getCitiesApi());
     }
 
+    @Given("^I am authenticated$")
+    public void i_am_authenticated() {
+        String token = Environment.createJWTString(1000L, false);
+        environment.setToken(token);
+    }
+
     @Then("^I receive a (\\d+) status code$")
     public void i_receive_a_status_code(int arg1) throws Throwable {
         assertEquals(arg1, environment.getLastStatusCode());

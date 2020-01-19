@@ -7,12 +7,18 @@ import ch.heigvd.amt.stalkerlog.api.StarsApi;
 import ch.heigvd.amt.stalkerlog.api.VisitsApi;
 
 import java.io.IOException;
+import java.security.Key;
+import java.util.Base64;
 import java.util.Properties;
+
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 
 /**
  * Created by Olivier Liechti on 24/06/17.
  */
 public class Environment {
+    private static String KEY_STRING = "+UekP+1B79335qjAe56sWOMZpI+ynYMhK3Dp8R+wS70=";
 
     private CitiesApi citiesApi = new CitiesApi();
     private StarsApi starsApi = new StarsApi();
@@ -23,6 +29,7 @@ public class Environment {
     private boolean lastApiCallThrewException;
     private int lastStatusCode;
     private int lastEntityId;
+    private String token;
 
     public Environment() throws IOException {
         Properties properties = new Properties();
@@ -83,5 +90,27 @@ public class Environment {
 
     public void setLastEntityId(int lastEntityId) {
         this.lastEntityId = lastEntityId;
+    }
+
+    public static String createJWTString(Long userId, boolean role) {
+        // Generate signed JWT containing the user's id and role
+        return Jwts.builder()
+                .claim("userId", userId)
+                .claim("role", role)
+                .signWith(decodeKey(KEY_STRING))
+                .compact();
+    }
+
+    private static Key decodeKey(String keyString) {
+        byte[] keyBytes = Base64.getDecoder().decode(keyString);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
