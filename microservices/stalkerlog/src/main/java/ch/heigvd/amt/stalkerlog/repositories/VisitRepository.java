@@ -1,6 +1,8 @@
 package ch.heigvd.amt.stalkerlog.repositories;
 
 import ch.heigvd.amt.stalkerlog.entities.VisitEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -9,4 +11,5 @@ import org.springframework.data.repository.CrudRepository;
  * @author Alison Savary, Luc Wachter
  */
 public interface VisitRepository extends CrudRepository<VisitEntity, Long> {
+    Page<VisitEntity> findAllByOrderByStar(Pageable pageable);
 }

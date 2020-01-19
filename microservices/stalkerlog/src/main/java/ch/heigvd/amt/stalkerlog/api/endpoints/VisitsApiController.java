@@ -9,6 +9,8 @@ import ch.heigvd.amt.stalkerlog.repositories.VisitRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -53,13 +55,18 @@ public class VisitsApiController implements VisitsApi {
     }
 
     @Override
-    public ResponseEntity<List<Visit>> getVisits() {
+    public ResponseEntity<List<Visit>> getVisits(@Valid Integer page, @Valid Integer pageSize) {
         List<Visit> visits = new ArrayList<>();
         // TODO visits of user
-        for(VisitEntity visitEntity : visitRepository.findAll()) {
+        for(VisitEntity visitEntity : visitRepository.findAllByOrderByStar(PageRequest.of(page - 1, pageSize))) {
             visits.add(toVisit(visitEntity));
         }
-        return ResponseEntity.ok(visits);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Pagination-NumberOfItems", String.valueOf(visitRepository.count()));
+        responseHeaders.set("Pagination-Next", "/visits?page=" + (page + 1) + "&pageSize="+ pageSize);
+        return ResponseEntity.ok()
+                .headers(responseHeaders)
+                .body(visits);
     }
 
     @Override
