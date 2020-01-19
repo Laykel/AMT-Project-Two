@@ -7,10 +7,10 @@ A simple Spring application that exposes a REST API allowing users to record the
 ## Navigate the documentation
 
 - **Guidelines** for the project in [this file](doc/Guidelines.md).
-- Full description of **what is implemented** in [this file](doc/functionalAspects.md).
+- ~~Full description of **what is implemented** in [this file](doc/functionalAspects.md).~~ Sadly, we didn't have time to document the features...
 - Description of the **application's architecture** in [this file](doc/architecture.md).
-- Description of the **testing strategy** in [this file](doc/testing.md)
-- ~~Report for the **performance tests** in [this file](doc/loadTesting.md).~~ Sadly, we didn't have time to create performance test scenarios...
+- ~~Description of the **testing strategy** in [this file](doc/testing.md)~~ Unfortunately, we didn't have time to document the tests we have...
+- ~~Report for the **performance tests** in [this file](doc/loadTesting.md).~~ Regrettably, we didn't have time to create performance test scenarios...
 
 ## How to build the app
 
@@ -22,7 +22,7 @@ docker-compose up -d --build
 
 The main API should then be available at [this address](http://localhost/api) and the auth API at [this address](http://localhost/auth).
 
-Warning: a last minute issue that we couldn't fix broke the connection to the db containers from the API containers.
+**Warning:** a last minute issue that we couldn't fix broke the connection to the db containers from the API containers.
 
 Launching the db containers and then the projects manually from IntelliJ still works... `docker-compose up apidb authdb`
 
