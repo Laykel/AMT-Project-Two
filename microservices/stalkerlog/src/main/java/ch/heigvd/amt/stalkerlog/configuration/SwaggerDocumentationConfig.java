@@ -5,11 +5,12 @@ import org.springframework.context.annotation.Configuration;
 
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.service.Tag;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+
+import java.util.Collections;
 
 @Configuration
 public class SwaggerDocumentationConfig {
@@ -19,7 +20,7 @@ public class SwaggerDocumentationConfig {
             .description("API to record and retrieve the cities your favourite stars visited.")
             .license("MIT")
             .licenseUrl("http://opensource.org/licenses/MIT")
-            .version("0.2.0")
+            .version("1.0.0")
             .contact(new Contact("Stalkerlog team", "", "luc.wachter@heig-vd.ch"))
             .build();
     }
@@ -35,6 +36,17 @@ public class SwaggerDocumentationConfig {
             .apiInfo(apiInfo())
             .tags(new Tag("visits", "Retrieve your star's visits and create, update or delete a new visit"),
                 new Tag("stars", "Retrieve the list of stars and create, update or delete a new star"),
-                new Tag("cities", "Retrieve the list of cities or countries"));
+                new Tag("cities", "Retrieve the list of cities or countries"))
+            .securitySchemes(Collections.singletonList(new ApiKey("JWT", "Authorization", "header")))
+            .securityContexts(Collections.singletonList(
+                SecurityContext.builder()
+                    .securityReferences(
+                        Collections.singletonList(SecurityReference.builder()
+                            .reference("JWT")
+                            .scopes(new AuthorizationScope[0])
+                            .build())
+                    )
+                    .build())
+            );
     }
 }

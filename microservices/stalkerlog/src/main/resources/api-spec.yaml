@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: '0.2.0'
+  version: '1.0.0'
   title: Stalkerlog API
   description: API to record and retrieve the cities your favourite stars visited.
   contact:
@@ -14,11 +14,11 @@ basePath: /api
 schemes:
   - http
 
-#securityDefinitions:
-#  Bearer:
-#    type: apiKey
-#    name: Authorization
-#    in: header
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
 
 tags:
 - name: visits
@@ -29,7 +29,6 @@ tags:
   description: Retrieve the list of cities or countries
 
 paths:
-  # TODO security
   /visits:
     post:
       description: Create a new visit
@@ -38,8 +37,8 @@ paths:
         - visits
       consumes:
         - application/json
-      #security:
-      #  - Bearer: []
+      security:
+        - Bearer: []
       parameters:
         - name: visit
           in: body
@@ -65,14 +64,18 @@ paths:
         - visits
       produces:
         - application/json
+      security:
+        - Bearer: []
       parameters:
         - in: query
           name: page
           type: integer
+          default: 1
           description: Number of the page to return
         - in: query
           name: pageSize
           type: integer
+          default: 10
           description: The numbers of items to return
       responses:
         '200':
@@ -92,6 +95,8 @@ paths:
         - visits
       produces:
         - application/json
+      security:
+        - Bearer: []
       parameters:
         - in: path
           name: id
@@ -114,6 +119,8 @@ paths:
         - visits
       consumes:
         - application/json
+      security:
+        - Bearer: []
       parameters:
         - in: path
           name: id
@@ -140,6 +147,8 @@ paths:
       operationId: deleteVisit
       tags:
         - visits
+      security:
+        - Bearer: []
       parameters:
         - in: path
           name: id
@@ -166,10 +175,12 @@ paths:
         - in: query
           name: page
           type: integer
+          default: 1
           description: Number of the page to return
         - in: query
           name: pageSize
           type: integer
+          default: 10
           description: The numbers of items to return
       responses:
         '200':
@@ -195,7 +206,6 @@ paths:
             items:
               $ref: '#/definitions/country'
 
-  # TODO add pagination
   /stars:
     post:
       description: Create a new star
@@ -204,8 +214,8 @@ paths:
         - stars
       consumes:
         - application/json
-      #security:
-      #  - Bearer: []
+      security:
+        - Bearer: []
       parameters:
         - name: star
           in: body
@@ -231,14 +241,18 @@ paths:
         - stars
       produces:
         - application/json
+      security:
+        - Bearer: []
       parameters:
         - in: query
           name: page
           type: integer
+          default: 1
           description: Number of the page to return
         - in: query
           name: pageSize
           type: integer
+          default: 10
           description: The numbers of items to return
       responses:
         '200':
@@ -256,6 +270,8 @@ paths:
         - stars
       produces:
         - application/json
+      security:
+        - Bearer: []
       parameters:
         - in: path
           name: id
@@ -278,6 +294,8 @@ paths:
         - stars
       consumes:
         - application/json
+      security:
+        - Bearer: []
       parameters:
         - in: path
           name: id
@@ -304,6 +322,8 @@ paths:
       operationId: deleteStar
       tags:
         - stars
+      security:
+        - Bearer: []
       parameters:
         - in: path
           name: id
@@ -317,7 +337,6 @@ paths:
           description: Removal unauthorized
         '404':
           description: Resource doesn't exist
-
 
 definitions:
   visit:

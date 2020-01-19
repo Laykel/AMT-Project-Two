@@ -16,9 +16,9 @@ schemes:
 
 tags:
   - name: users
-    description: Create a new user (register), retrieve your information or update it
+    description: Retrieve your information or update it
   - name: session
-    description: Retrieve a JWT token...
+    description: Retrieve a JWT token
   - name: admin
     description: Operations available only to admin users
 

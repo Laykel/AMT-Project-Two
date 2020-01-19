@@ -43,6 +43,9 @@ public class SwaggerDocumentationConfig {
             .directModelSubstitute(org.joda.time.LocalDate.class, java.sql.Date.class)
             .directModelSubstitute(org.joda.time.DateTime.class, java.util.Date.class)
             .apiInfo(apiInfo())
+            .tags(new Tag("users", "Retrieve your information or update it"),
+                new Tag("session", "Retrieve a JWT token"),
+                new Tag("admin", "Operations available only to admin users"))
             .select()
             .apis(RequestHandlerSelectors.basePackage("ch.heigvd.amt.stalkerlog.api"))
             .build();
