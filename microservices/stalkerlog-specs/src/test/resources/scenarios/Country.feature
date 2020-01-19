@@ -1,7 +1,7 @@
 Feature: Getting the list of countries
 
   Background:
-    Given there is a Countries server
+    Given there is a Cities server
 
   Scenario: get the countries
     When I GET the /countries endpoint

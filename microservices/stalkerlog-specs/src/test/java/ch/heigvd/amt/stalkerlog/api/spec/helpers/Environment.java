@@ -3,7 +3,6 @@ package ch.heigvd.amt.stalkerlog.api.spec.helpers;
 import ch.heigvd.amt.stalkerlog.ApiException;
 import ch.heigvd.amt.stalkerlog.ApiResponse;
 import ch.heigvd.amt.stalkerlog.api.CitiesApi;
-import ch.heigvd.amt.stalkerlog.api.CountriesApi;
 import ch.heigvd.amt.stalkerlog.api.StarsApi;
 import ch.heigvd.amt.stalkerlog.api.VisitsApi;
 
@@ -18,7 +17,6 @@ public class Environment {
     private CitiesApi citiesApi = new CitiesApi();
     private StarsApi starsApi = new StarsApi();
     private VisitsApi visitsApi = new VisitsApi();
-    private CountriesApi countriesApi = new CountriesApi();
 
     private ApiResponse lastApiResponse;
     private ApiException lastApiException;
@@ -33,7 +31,6 @@ public class Environment {
         citiesApi.getApiClient().setBasePath(url);
         starsApi.getApiClient().setBasePath(url);
         visitsApi.getApiClient().setBasePath(url);
-        countriesApi.getApiClient().setBasePath(url);
     }
 
     public CitiesApi getCitiesApi() {
@@ -46,10 +43,6 @@ public class Environment {
 
     public VisitsApi getVisitsApi() {
         return visitsApi;
-    }
-
-    public CountriesApi getCountriesApi() {
-        return countriesApi;
     }
 
     public ApiResponse getLastApiResponse() {

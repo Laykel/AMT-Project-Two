@@ -1,15 +1,22 @@
 package ch.heigvd.amt.stalkerlog.api.spec.steps;
 
 import ch.heigvd.amt.stalkerlog.api.spec.helpers.Environment;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class UtilSteps {
     private Environment environment;
 
     public UtilSteps(Environment environment) {
         this.environment = environment;
+    }
+
+    @Given("^there is a Cities server$")
+    public void there_is_a_Countries_server() throws Throwable {
+        assertNotNull(environment.getCitiesApi());
     }
 
     @Then("^I receive a (\\d+) status code$")

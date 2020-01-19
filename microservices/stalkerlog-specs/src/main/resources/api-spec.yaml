@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: '0.2.0'
+  version: '1.0.0'
   title: Stalkerlog API
   description: API to record and retrieve the cities your favourite stars visited.
   contact:
@@ -14,11 +14,11 @@ basePath: /api
 schemes:
   - http
 
-#securityDefinitions:
-#  Bearer:
-#    type: apiKey
-#    name: Authorization
-#    in: header
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
 
 tags:
   - name: visits
@@ -26,12 +26,9 @@ tags:
   - name: stars
     description: Retrieve the list of stars and create, update or delete a new star
   - name: cities
-    description: Retrieve the list of cities
-  - name: countries
-    description: Retrieve the list of countries
+    description: Retrieve the list of cities or countries
 
 paths:
-  # TODO security
   /visits:
     post:
       description: Create a new visit
@@ -40,8 +37,8 @@ paths:
         - visits
       consumes:
         - application/json
-      #security:
-      #  - Bearer: []
+      security:
+        - Bearer: []
       parameters:
         - name: visit
           in: body
@@ -60,7 +57,6 @@ paths:
           description: The provided city or star doesn't exist
         '401':
           description: Creation unauthorized
-    # TODO add pagination, add getVisits(starId) ?
     get:
       description: List all of this user's visits
       operationId: getVisits
@@ -68,6 +64,19 @@ paths:
         - visits
       produces:
         - application/json
+      security:
+        - Bearer: []
+      parameters:
+        - in: query
+          name: page
+          type: integer
+          default: 1
+          description: Number of the page to return
+        - in: query
+          name: pageSize
+          type: integer
+          default: 10
+          description: The numbers of items to return
       responses:
         '200':
           description: List of the user's visits
@@ -86,6 +95,8 @@ paths:
         - visits
       produces:
         - application/json
+      security:
+        - Bearer: []
       parameters:
         - in: path
           name: id
@@ -101,13 +112,15 @@ paths:
           description: Not authorized
         '404':
           description: Resource doesn't exist
-    patch:
-      description: Update some fields of the specified visit
-      operationId: patchVisit
+    put:
+      description: Update the specified visit
+      operationId: putVisit
       tags:
         - visits
       consumes:
         - application/json
+      security:
+        - Bearer: []
       parameters:
         - in: path
           name: id
@@ -124,7 +137,7 @@ paths:
         '200':
           description: Update successful
         '400':
-          description: The provided city doesn't exist
+          description: The provided city doesn't exist or star
         '401':
           description: Update unauthorized
         '404':
@@ -134,6 +147,8 @@ paths:
       operationId: deleteVisit
       tags:
         - visits
+      security:
+        - Bearer: []
       parameters:
         - in: path
           name: id
@@ -148,7 +163,6 @@ paths:
         '404':
           description: Resource doesn't exist
 
-  # TODO add pagination
   /cities:
     get:
       description: List all of the cities
@@ -157,9 +171,20 @@ paths:
         - cities
       produces:
         - application/json
+      parameters:
+        - in: query
+          name: page
+          type: integer
+          default: 1
+          description: Number of the page to return
+        - in: query
+          name: pageSize
+          type: integer
+          default: 10
+          description: The numbers of items to return
       responses:
         '200':
-          description: List of all cities
+          description: List of all cities of the page
           schema:
             type: array
             items:
@@ -170,7 +195,7 @@ paths:
       description: List all of the countries
       operationId: getCountries
       tags:
-        - countries
+        - cities
       produces:
         - application/json
       responses:
@@ -181,7 +206,6 @@ paths:
             items:
               $ref: '#/definitions/country'
 
-  # TODO add pagination
   /stars:
     post:
       description: Create a new star
@@ -190,8 +214,8 @@ paths:
         - stars
       consumes:
         - application/json
-      #security:
-      #  - Bearer: []
+      security:
+        - Bearer: []
       parameters:
         - name: star
           in: body
@@ -217,6 +241,19 @@ paths:
         - stars
       produces:
         - application/json
+      security:
+        - Bearer: []
+      parameters:
+        - in: query
+          name: page
+          type: integer
+          default: 1
+          description: Number of the page to return
+        - in: query
+          name: pageSize
+          type: integer
+          default: 10
+          description: The numbers of items to return
       responses:
         '200':
           description: List of all the stars
@@ -233,6 +270,8 @@ paths:
         - stars
       produces:
         - application/json
+      security:
+        - Bearer: []
       parameters:
         - in: path
           name: id
@@ -255,6 +294,8 @@ paths:
         - stars
       consumes:
         - application/json
+      security:
+        - Bearer: []
       parameters:
         - in: path
           name: id
@@ -281,6 +322,8 @@ paths:
       operationId: deleteStar
       tags:
         - stars
+      security:
+        - Bearer: []
       parameters:
         - in: path
           name: id
@@ -294,7 +337,6 @@ paths:
           description: Removal unauthorized
         '404':
           description: Resource doesn't exist
-
 
 definitions:
   visit:

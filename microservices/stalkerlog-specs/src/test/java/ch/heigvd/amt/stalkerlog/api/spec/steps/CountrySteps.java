@@ -1,7 +1,7 @@
 package ch.heigvd.amt.stalkerlog.api.spec.steps;
 
 import ch.heigvd.amt.stalkerlog.ApiException;
-import ch.heigvd.amt.stalkerlog.api.CountriesApi;
+import ch.heigvd.amt.stalkerlog.api.CitiesApi;
 import ch.heigvd.amt.stalkerlog.api.dto.Country;
 import ch.heigvd.amt.stalkerlog.api.spec.helpers.Environment;
 import cucumber.api.java.en.And;
@@ -15,22 +15,17 @@ import static org.junit.Assert.*;
 
 public class CountrySteps {
     private Environment environment;
-    private CountriesApi countriesApi;
+    private CitiesApi citiesApi;
 
     public CountrySteps(Environment environment) {
         this.environment = environment;
-        this.countriesApi = environment.getCountriesApi();
-    }
-
-    @Given("^there is a Countries server$")
-    public void there_is_a_Countries_server() throws Throwable {
-        assertNotNull(countriesApi);
+        this.citiesApi = environment.getCitiesApi();
     }
 
     @When("^I GET the /countries endpoint$")
     public void i_GET_the_countries_endpoint() {
         try {
-            environment.setLastApiResponse(countriesApi.getCountriesWithHttpInfo());
+            environment.setLastApiResponse(citiesApi.getCountriesWithHttpInfo());
             environment.setLastApiCallThrewException(false);
             environment.setLastApiException(null);
             environment.setLastStatusCode(environment.getLastApiResponse().getStatusCode());
