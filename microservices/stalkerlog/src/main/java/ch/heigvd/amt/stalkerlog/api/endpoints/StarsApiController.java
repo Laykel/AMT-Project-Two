@@ -9,11 +9,13 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.ArrayList;
@@ -31,9 +33,13 @@ public class StarsApiController implements StarsApi {
     @Autowired
     StarRepository starRepository;
 
+    @Autowired
+    private HttpServletRequest request;
+
     @Override
     public ResponseEntity<Void> postStar(@ApiParam(value = "", required = true) @Valid @RequestBody Star star) {
-        StarEntity newStarEntity = toStarEntity(star);
+        // Create entity with owner id
+        StarEntity newStarEntity = toStarEntity(star, (Long) request.getAttribute("userId"));
         starRepository.save(newStarEntity);
 
         URI location = ServletUriComponentsBuilder
@@ -46,25 +52,35 @@ public class StarsApiController implements StarsApi {
     @Override
     public ResponseEntity<List<Star>> getStars(@Valid Integer page, @Valid Integer pageSize) {
         List<Star> stars = new ArrayList<>();
-        // TODO stars of user
-        for (StarEntity starEntity : starRepository.findAllByOrderByName(PageRequest.of(page - 1, pageSize))) {
+        long owner = (Long) request.getAttribute("userId");
+
+        for (StarEntity starEntity :
+            starRepository.findAllByOwnerOrderByName(owner, PageRequest.of(page - 1, pageSize))) {
             stars.add(toStar(starEntity));
         }
+
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Pagination-NumberOfItems", String.valueOf(starRepository.count()));
-        responseHeaders.set("Pagination-Next", "/stars?page=" + (page + 1) + "&pageSize="+ pageSize);
+        responseHeaders.set("Pagination-Next", "/stars?page=" + (page + 1) + "&pageSize=" + pageSize);
         return ResponseEntity.ok()
-                .headers(responseHeaders)
-                .body(stars);
+            .headers(responseHeaders)
+            .body(stars);
     }
 
     @Override
     public ResponseEntity<Star> getStar(Integer id) {
         Optional<StarEntity> starEntity = starRepository.findById(Long.valueOf(id));
+        long owner = (Long) request.getAttribute("userId");
+
         // Star exists in database
         if (starEntity.isPresent()) {
-            // TODO check owner
             Star star = toStar(starEntity.get());
+
+            // Check if this star belongs to that user
+            if (owner != starEntity.get().getOwner()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
             return ResponseEntity.ok(star);
         } else {
             return ResponseEntity.notFound().build();
@@ -73,13 +89,20 @@ public class StarsApiController implements StarsApi {
 
     @Override
     public ResponseEntity<Void> putStar(Integer id, @Valid Star star) {
-        StarEntity starEntity = toStarEntity(star);
+        long owner = (Long) request.getAttribute("userId");
+        StarEntity updatedEntity = toStarEntity(star, owner);
+
+        Optional<StarEntity> starEntity = starRepository.findById(Long.valueOf(id));
+
         // Star exists in database
-        if (starRepository.findById(Long.valueOf(id)).isPresent()) {
-            // TODO check owner
-            // TODO PROBABLY NOT HOW IT SHOULD BE DONE
-            starEntity.setId(id);
-            starRepository.save(starEntity);
+        if (starEntity.isPresent()) {
+            // Check if this star belongs to that user
+            if (owner != starEntity.get().getOwner()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            updatedEntity.setId(id);
+            starRepository.save(updatedEntity);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
@@ -88,8 +111,16 @@ public class StarsApiController implements StarsApi {
 
     @Override
     public ResponseEntity<Void> deleteStar(Integer id) {
-        if (starRepository.findById(Long.valueOf(id)).isPresent()) {
-            // TODO check owner
+        Optional<StarEntity> starEntity = starRepository.findById(Long.valueOf(id));
+        long owner = (Long) request.getAttribute("userId");
+
+        // Star exists in database
+        if (starEntity.isPresent()) {
+            // Check if this star belongs to that user
+            if (owner != starEntity.get().getOwner()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
             starRepository.deleteById(Long.valueOf(id));
             return ResponseEntity.status(204).build();
         } else {
@@ -97,10 +128,11 @@ public class StarsApiController implements StarsApi {
         }
     }
 
-    private StarEntity toStarEntity(Star star) {
+    private StarEntity toStarEntity(Star star, long owner) {
         StarEntity entity = new StarEntity();
         entity.setName(star.getName());
         entity.setPlatform(star.getPlatform());
+        entity.setOwner(owner);
         return entity;
     }
 

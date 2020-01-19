@@ -27,4 +27,8 @@ public class StarEntity implements Serializable {
     @Getter
     @Setter
     private String platform;
+
+    @Getter
+    @Setter
+    private long owner;
 }

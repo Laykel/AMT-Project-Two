@@ -40,4 +40,8 @@ public class VisitEntity implements Serializable {
     @Getter
     @Setter
     private CityEntity city;
+
+    @Getter
+    @Setter
+    private long owner;
 }
