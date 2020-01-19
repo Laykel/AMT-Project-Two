@@ -20,6 +20,15 @@ To build the app easily, you can use `docker` and `docker-compose`. In order to 
 docker-compose up --build
 ```
 
+### Test data
+
+- ...
+
+We have one admin user and one simple user defined with the following data:
+
+- admin@sl.ch, paSSw0rd
+- notadmin@gm.com, Sidney413
+
 ## How to run the tests
 
 ...
