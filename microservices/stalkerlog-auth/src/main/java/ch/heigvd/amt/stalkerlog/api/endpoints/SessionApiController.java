@@ -32,7 +32,7 @@ public class SessionApiController implements SessionApi {
 
         // Check user password
         if (!AuthUtils.checkPassword(credentials.getPassword(), user.getPassword())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Wrong password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"Details\": \"Wrong password\"}");
         }
 
         // Create the JWT token and send it back as JSON

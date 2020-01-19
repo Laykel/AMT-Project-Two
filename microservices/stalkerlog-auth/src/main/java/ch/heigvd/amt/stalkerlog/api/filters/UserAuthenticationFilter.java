@@ -24,14 +24,16 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String jwt = request.getHeader("Authorization");
         if (jwt == null) {
-            response.sendError(HttpStatus.UNAUTHORIZED.value(), "The Authorization header must be set");
+            response.sendError(HttpStatus.UNAUTHORIZED.value(),
+                "{\"Details\": \"The Authorization header must be set\"}");
             return;
         }
 
         Jws<Claims> jws = AuthUtils.decodeJWTString(jwt);
 
         if (jws == null) {
-            response.sendError(HttpStatus.UNAUTHORIZED.value(), "Please provide a valid token");
+            response.sendError(HttpStatus.UNAUTHORIZED.value(),
+                "{\"Details\": \"Please provide a valid token\"}");
             return;
         }
 

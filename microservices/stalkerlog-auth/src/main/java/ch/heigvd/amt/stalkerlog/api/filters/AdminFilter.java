@@ -22,7 +22,8 @@ public class AdminFilter extends OncePerRequestFilter {
         boolean isAdmin = (Boolean) request.getAttribute("isAdmin");
 
         if (!isAdmin) {
-            response.sendError(HttpStatus.UNAUTHORIZED.value(), "You must be an admin to perform this action");
+            response.sendError(HttpStatus.UNAUTHORIZED.value(),
+                "{\"Details\": \"You must be an admin to perform this action\"}");
             return;
         }
 
