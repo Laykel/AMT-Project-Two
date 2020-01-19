@@ -20,7 +20,7 @@ public class SwaggerDocumentationConfig {
             .description("API to register users and get a JWT token.")
             .license("MIT")
             .licenseUrl("http://opensource.org/licenses/MIT")
-            .version("0.1.0")
+            .version("1.0.0")
             .contact(new Contact("Stalkerlog team", "", "luc.wachter@heig-vd.ch"))
             .build();
     }

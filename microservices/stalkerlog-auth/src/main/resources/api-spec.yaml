@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: '0.1.0'
+  version: '1.0.0'
   title: Stalkerlog Auth API
   description: API to register users and get a JWT token.
   contact:
