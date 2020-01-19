@@ -104,7 +104,7 @@ public class VisitsApiController implements VisitsApi {
     }
 
     @Override
-    public ResponseEntity<Void> putVisit(Integer id, @Valid Visit visit) {
+    public ResponseEntity<Void> patchVisit(Integer id, @Valid Visit visit) {
         long owner = (Long) request.getAttribute("userId");
         VisitEntity updatedEntity = toVisitEntity(visit, owner);
 
