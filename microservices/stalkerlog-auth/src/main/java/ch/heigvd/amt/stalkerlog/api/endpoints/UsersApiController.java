@@ -2,6 +2,7 @@ package ch.heigvd.amt.stalkerlog.api.endpoints;
 
 import ch.heigvd.amt.stalkerlog.api.UsersApi;
 import ch.heigvd.amt.stalkerlog.api.model.User;
+import ch.heigvd.amt.stalkerlog.api.util.UserUtils;
 import ch.heigvd.amt.stalkerlog.entities.UserEntity;
 import ch.heigvd.amt.stalkerlog.repositories.UserRepository;
 import io.swagger.annotations.Api;
@@ -30,7 +31,7 @@ public class UsersApiController implements UsersApi {
 
     @Override
     public ResponseEntity<Void> putUser(Integer id, @Valid User user) {
-        UserEntity userEntity = toUserEntity(user);
+        UserEntity userEntity = UserUtils.toUserEntity(user);
 
         if (request.getAttribute("userId") != Long.valueOf(id)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -56,7 +57,7 @@ public class UsersApiController implements UsersApi {
         }
 
         if (userEntity.isPresent()) {
-            User user = toUser(userEntity.get());
+            User user = UserUtils.toUser(userEntity.get());
             return ResponseEntity.ok(user);
         }
 
@@ -75,23 +76,5 @@ public class UsersApiController implements UsersApi {
         }
 
         return ResponseEntity.notFound().build();
-    }
-
-    private UserEntity toUserEntity(User user) {
-        UserEntity entity = new UserEntity();
-        entity.setEmail(user.getEmail());
-        entity.setFirstName(user.getFirstName());
-        entity.setLastName(user.getLastName());
-        entity.setPassword(user.getPassword());
-        return entity;
-    }
-
-    private User toUser(UserEntity entity) {
-        User user = new User();
-        user.setEmail(entity.getEmail());
-        user.setFirstName(entity.getFirstName());
-        user.setLastName(entity.getLastName());
-        user.setPassword(entity.getPassword());
-        return user;
     }
 }

@@ -31,7 +31,7 @@ public class SessionApiController implements SessionApi {
         UserEntity user = userRepository.findByEmail(credentials.getEmail());
 
         // Check user password
-        if (!user.getPassword().equals(credentials.getPassword())) {
+        if (!AuthUtils.checkPassword(credentials.getPassword(), user.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Wrong password");
         }
 

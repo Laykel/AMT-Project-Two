@@ -2,6 +2,7 @@ package ch.heigvd.amt.stalkerlog.api.endpoints;
 
 import ch.heigvd.amt.stalkerlog.api.RegistrationApi;
 import ch.heigvd.amt.stalkerlog.api.model.User;
+import ch.heigvd.amt.stalkerlog.api.util.UserUtils;
 import ch.heigvd.amt.stalkerlog.entities.UserEntity;
 import ch.heigvd.amt.stalkerlog.repositories.UserRepository;
 import io.swagger.annotations.Api;
@@ -28,7 +29,7 @@ public class RegistrationApiController implements RegistrationApi {
 
     @Override
     public ResponseEntity<Void> postUser(@ApiParam(value = "", required = true) @Valid @RequestBody User user) {
-        UserEntity newUserEntity = toUserEntity(user);
+        UserEntity newUserEntity = UserUtils.toUserEntity(user);
         userRepository.save(newUserEntity);
 
         URI location = ServletUriComponentsBuilder
@@ -36,14 +37,5 @@ public class RegistrationApiController implements RegistrationApi {
             .buildAndExpand(newUserEntity.getId()).toUri();
 
         return ResponseEntity.created(location).build();
-    }
-
-    private UserEntity toUserEntity(User user) {
-        UserEntity entity = new UserEntity();
-        entity.setEmail(user.getEmail());
-        entity.setFirstName(user.getFirstName());
-        entity.setLastName(user.getLastName());
-        entity.setPassword(user.getPassword());
-        return entity;
     }
 }

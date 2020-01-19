@@ -19,7 +19,7 @@ import java.io.IOException;
 public class AdminFilter extends OncePerRequestFilter {
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        boolean isAdmin = Boolean.parseBoolean((String) request.getAttribute("isAdmin"));
+        boolean isAdmin = (Boolean) request.getAttribute("isAdmin");
 
         if (!isAdmin) {
             response.sendError(HttpStatus.UNAUTHORIZED.value(), "You must be an admin to perform this action");
