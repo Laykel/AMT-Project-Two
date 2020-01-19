@@ -1,3 +1,5 @@
+TRUNCATE TABLE user;
+
 INSERT INTO user (email, first_name, last_name, is_admin, password) VALUES
 ('admin@sl.ch', 'adm', 'in', 1, '$2a$10$XEdw2VBLYtp72kXQ4tAXku3cVQLsg/06BdlXIy8oL90yueemZ5ZJu'),
 ('notadmin@gm.com', 'franck', 'bob', 0, '$2a$10$2RdXQQaOgXjrm4U7MpJeIuD7MGtNxAJhNLNoaphToDhSt4XqxVqbq'),

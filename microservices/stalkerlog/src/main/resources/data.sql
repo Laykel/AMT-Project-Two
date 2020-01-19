@@ -1,3 +1,8 @@
+TRUNCATE TABLE country;
+TRUNCATE TABLE city;
+TRUNCATE TABLE star;
+TRUNCATE TABLE visit;
+
 INSERT INTO country (country_code, name) VALUES
 ('AF', 'Afghanistan'),
 ('AX', 'Åland Islands'),
